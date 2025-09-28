@@ -15,7 +15,7 @@ const Resume: React.FC = () => {
 
       <div className="resume-content">
         <div className="resume-preview">
-          <PDFViewer file="/pdfs/resume.pdf" className="modern-pdf-viewer" />
+          <PDFViewer file={`${import.meta.env.BASE_URL}pdfs/resume.pdf`} className="modern-pdf-viewer" />
         </div>
 
         <div className="resume-summary">

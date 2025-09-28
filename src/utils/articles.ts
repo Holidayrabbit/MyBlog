@@ -5,7 +5,7 @@ import type { Article } from '../types';
  */
 export async function fetchArticles(): Promise<Article[]> {
   try {
-    const response = await fetch('/articles.json');
+    const response = await fetch(`${import.meta.env.BASE_URL}articles.json`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -61,7 +61,7 @@ function processMarkdownContent(content: string): string {
  */
 export async function fetchArticleContent(filename: string): Promise<string> {
   try {
-    const response = await fetch(`/articles/${filename}`);
+    const response = await fetch(`${import.meta.env.BASE_URL}articles/${filename}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
