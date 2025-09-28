@@ -1,13 +1,14 @@
 /* PDF Viewer 样式 */
 .pdf-viewer-container {
   background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border: none;
+  border-radius: 12px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   height: 100%;
   min-height: 600px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
 .pdf-viewer-container.fullscreen {
@@ -26,12 +27,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
+  padding: 8px 12px;
   background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
   border-bottom: 1px solid var(--border-color);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
-  min-height: 60px;
+  min-height: 52px;
 }
 
 .toolbar-left,
@@ -58,6 +59,10 @@
   border: 1px solid var(--border-color);
   min-width: 60px;
   text-align: center;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .toolbar-btn {
@@ -68,13 +73,15 @@
   background-color: var(--bg-secondary);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
-  padding: 8px 12px;
+  padding: 0 12px;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 14px;
   font-weight: 500;
-  min-height: 36px;
+  height: 36px;
+  min-width: 36px;
+  box-sizing: border-box;
 }
 
 .toolbar-btn:hover:not(:disabled) {
@@ -94,13 +101,18 @@
 }
 
 .toolbar-btn.download-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-color: var(--accent-orange);
   color: white;
-  border: none;
+  border: 1px solid var(--accent-orange);
+  height: 36px;
+  min-width: 36px;
+  padding: 0 12px;
+  box-sizing: border-box;
 }
 
 .toolbar-btn.download-btn:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  background-color: var(--accent-orange-hover);
+  border-color: var(--accent-orange-hover);
 }
 
 .toolbar-btn.reset-btn {
@@ -119,7 +131,7 @@
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding: 20px;
+  padding: 5px;
   overflow: auto;
   position: relative;
 }
@@ -190,7 +202,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-color: var(--accent-orange);
   color: white;
   border: none;
   padding: 12px 24px;
@@ -203,9 +215,9 @@
 }
 
 .download-btn:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  background-color: var(--accent-orange-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 25px rgba(204, 124, 94, 0.4);
 }
 
 /* 响应式设计 */
