@@ -16,7 +16,7 @@ import './article.css';
 function App() {
   return (
     <ThemeProvider>
-      <Router>
+      <Router basename="/MyBlog">
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
