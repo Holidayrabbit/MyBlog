@@ -101,7 +101,7 @@
 }
 
 .article-item .article-title a:hover {
-  color: var(--text-secondary);
+  color: var(--accent-orange);
 }
 
 .articles-sidebar {
@@ -250,7 +250,7 @@
 }
 
 .contact-link:hover {
-  color: var(--text-secondary);
+  color: var(--accent-orange);
 }
 
 /* Projects Page */
@@ -286,7 +286,7 @@
 }
 
 .project-link:hover {
-  color: var(--text-secondary);
+  color: var(--accent-orange);
 }
 
 .project-description {
