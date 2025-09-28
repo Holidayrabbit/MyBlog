@@ -1,0 +1,245 @@
+/* Header */
+.header {
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.logo:hover {
+  color: var(--text-secondary);
+}
+
+.nav {
+  display: flex;
+  gap: 32px;
+}
+
+.nav-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 400;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--text-secondary);
+}
+
+.nav-link.active {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--text-primary);
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+}
+
+.control-btn {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.control-btn:hover {
+  background-color: var(--hover-bg);
+}
+
+/* Footer */
+.footer {
+  background-color: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+  padding: 24px 0;
+  text-align: center;
+}
+
+.footer-text {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* Common Components */
+.section-title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 32px;
+  color: var(--text-primary);
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.page-title {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.page-description {
+  font-size: 18px;
+  color: var(--text-secondary);
+}
+
+.read-more {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.read-more:hover {
+  color: var(--text-secondary);
+}
+
+.tag {
+  background-color: var(--bg-tertiary);
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.tag.clickable {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.tag.clickable:hover {
+  background-color: var(--hover-bg);
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.stat-icon {
+  font-size: 16px;
+}
+
+.stat-label {
+  color: var(--text-secondary);
+}
+
+.stat-value {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Cards */
+.article-card, .nav-card, .project-card {
+  background-color: var(--bg-secondary);
+  padding: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  transition: box-shadow 0.3s ease;
+}
+
+.article-card:hover, .nav-card:hover, .project-card:hover {
+  box-shadow: var(--shadow);
+}
+
+.nav-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Loading and Error States */
+.loading, .error, .no-articles {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+.loading-small {
+  text-align: center;
+  padding: 10px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.error {
+  color: #dc3545;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.no-articles {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    gap: 20px;
+    padding: 16px 0;
+  }
+  
+  .nav {
+    gap: 20px;
+  }
+  
+  .section-title {
+    font-size: 28px;
+  }
+  
+  .page-title {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 24px;
+  }
+}

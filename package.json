@@ -1,0 +1,54 @@
+{
+  "name": "myblog",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "极简个人博客系统 - 基于React+TypeScript",
+  "keywords": [
+    "react",
+    "typescript",
+    "blog",
+    "vite",
+    "github-pages"
+  ],
+  "author": "ZhaoQie",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "deploy": "npm run build && gh-pages -d dist",
+    "articles:generate": "node scripts/generate-articles.js",
+    "articles:watch": "npm run articles:generate && npm run dev"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@types/react-router-dom": "^5.3.3",
+    "gray-matter": "^4.0.3",
+    "i18next": "^25.5.2",
+    "lucide-react": "^0.544.0",
+    "pdfjs-dist": "^5.4.149",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-i18next": "^16.0.0",
+    "react-markdown": "^10.1.0",
+    "react-pdf": "^10.1.0",
+    "react-router-dom": "^7.9.3",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.3",
+    "eslint": "^9.36.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.4.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.44.0",
+    "vite": "^7.1.7"
+  }
+}
