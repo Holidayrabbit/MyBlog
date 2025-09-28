@@ -4,8 +4,8 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // 用户站点部署在根路径，开发和生产都使用根路径
-  base: '/',
+  // 项目站点部署在 /MyBlog/ 子路径
+  base: '/MyBlog/',
   build: {
     outDir: 'dist',
     sourcemap: true
