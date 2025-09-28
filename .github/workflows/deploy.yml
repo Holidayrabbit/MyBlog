@@ -6,9 +6,23 @@ on:
   pull_request:
     branches: [ main ]
 
+# 设置GitHub Pages部署必需的权限
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 允许并发部署，但跳过正在进行的运行之间的运行队列
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     
     steps:
     - name: Checkout 🛎️
@@ -29,9 +43,17 @@ jobs:
     - name: Build 🏗️
       run: npm run build
       
-    - name: Deploy 🚀
+    - name: Setup Pages 🔧
       if: github.ref == 'refs/heads/main'
-      uses: peaceiris/actions-gh-pages@v4
+      uses: actions/configure-pages@v4
+      
+    - name: Upload Pages artifact 📦
+      if: github.ref == 'refs/heads/main'
+      uses: actions/upload-pages-artifact@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
+        path: ./dist
+        
+    - name: Deploy to GitHub Pages 🚀
+      if: github.ref == 'refs/heads/main'
+      id: deployment
+      uses: actions/deploy-pages@v4
