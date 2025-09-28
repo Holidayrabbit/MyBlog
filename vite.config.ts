@@ -5,8 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig(({ command }) => {
   return {
     plugins: [react()],
-    // 开发环境使用根路径，生产环境使用GitHub Pages路径
-    base: command === 'serve' ? '/' : '/MyBlog/',
+    // 用户站点部署在根路径，开发和生产都使用根路径
+    base: '/',
     build: {
       outDir: 'dist',
       sourcemap: true
