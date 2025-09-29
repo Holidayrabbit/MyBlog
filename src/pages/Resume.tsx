@@ -99,9 +99,9 @@ const Resume: React.FC = () => {
               <a href="https://github.com/Holidayrabbit" target="_blank" rel="noopener noreferrer" className="contact-item">
                 🔗 GitHub
               </a>
-              <a href="https://www.linkedin.com/in/fulin-zhao-261479308/" target="_blank" rel="noopener noreferrer" className="contact-item">
+              {/* <a href="https://www.linkedin.com/in/fulin-zhao-261479308/" target="_blank" rel="noopener noreferrer" className="contact-item">
                 💼 LinkedIn
-              </a>
+              </a> */}
             </div>
           </section>
         </div>
