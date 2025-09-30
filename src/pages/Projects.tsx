@@ -6,27 +6,19 @@ import { ExternalLink, Github } from 'lucide-react';
 const mockProjects = [
   {
     id: '1',
-    name: 'Personal Blog System',
-    description: '基于React+TypeScript的极简个人博客系统，支持markdown文章、主题切换、国际化等功能',
-    url: 'https://ZhaoQie.cv',
-    github: 'https://github.com/ZhaoQie-Li97/blog',
+    name: 'MyBlog',
+    description: '基于React+TypeScript的极简个人博客系统，拒绝一切不必要的功能，设计灵感来自Anthropic官网。支持markdown文章、主题切换、中英文切换等功能。',
+    url: 'https://holidayrabbit.github.io/MyBlog/',
+    github: 'https://github.com/Holidayrabbit/MyBlog',
     tags: ['React', 'TypeScript', 'Markdown', 'GitHub Pages']
   },
   {
     id: '2',
-    name: 'Data Visualization Tool',
-    description: '用于科学数据可视化的工具库，支持多种图表类型和交互功能',
-    url: '#',
-    github: 'https://github.com/ZhaoQie-Li97/data-viz',
-    tags: ['Python', 'D3.js', 'Data Science', 'Visualization']
-  },
-  {
-    id: '3',
-    name: 'Research Paper Manager',
-    description: '学术论文管理工具，支持文献检索、分类整理和引用管理',
-    url: '#',
-    github: 'https://github.com/ZhaoQie-Li97/paper-manager',
-    tags: ['Python', 'Web Scraping', 'Academic', 'Database']
+    name: 'Aibrary: AI-native podcast platform',
+    description: '在Ouraca实习时参与的项目，结合LLM、经典书籍与现代流行的播客，打造个人线上图书馆。',
+    url: 'https://aibrary-portal.vercel.app/',
+    github: '#',
+    tags: ['Python', 'Langchain', 'LlamaIndex']
   }
 ];
 

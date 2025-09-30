@@ -8,9 +8,9 @@ const researchInterests = [
 
 // 模拟统计数据
 const academicStats = {
-  papers: 1,
-  projects: 1,
-  conferences: 1,
+  papers: 0,
+  projects: 2,
+  conferences: 0,
   fields: 1
 };
 
@@ -87,9 +87,9 @@ const Academic: React.FC = () => {
               <a href="mailto:zhaoqie888@icloud.com" className="contact-link">
                 📧 Email: zhaoqie888@icloud.com
               </a>
-              {/* <a href="https://www.linkedin.com/in/fulin-zhao-261479308/" target="_blank" rel="noopener noreferrer" className="contact-link">
+              <a href="https://www.linkedin.com/in/fulin-zhao-261479308/" target="_blank" rel="noopener noreferrer" className="contact-link">
                 💼 LinkedIn
-              </a> */}
+              </a>
               <a href="https://github.com/Holidayrabbit" target="_blank" rel="noopener noreferrer" className="contact-link">
                 🐱 GitHub
               </a>

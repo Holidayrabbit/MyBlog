@@ -108,6 +108,9 @@ const ArticleDetail: React.FC = () => {
                 ol: ({ children }) => <ol className="md-ol">{children}</ol>,
                 li: ({ children }) => <li className="md-li">{children}</li>,
                 blockquote: ({ children }) => <blockquote className="md-blockquote">{children}</blockquote>,
+                img: ({ src, alt }) => (
+                  <img src={src} alt={alt} className="md-img" loading="lazy" />
+                ),
               }}
             >
               {content}

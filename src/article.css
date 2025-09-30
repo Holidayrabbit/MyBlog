@@ -120,6 +120,16 @@
   color: var(--text-secondary);
 }
 
+.md-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 24px auto;
+  display: block;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 .article-not-found {
   text-align: center;
   padding: 60px 20px;
