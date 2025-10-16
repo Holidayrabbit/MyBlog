@@ -1,5 +1,18 @@
 [
   {
+    "id": "context_engineering",
+    "title": "Context Engineering Discussion by Lance and Pete",
+    "date": "2025年10月16日",
+    "excerpt": "Lance and Pete discuss Context Engineering",
+    "tags": [
+      "Agent",
+      "Context Engineering",
+      "Manus"
+    ],
+    "filename": "context_engineering.md",
+    "dateSort": "2025-10-16"
+  },
+  {
     "id": "test_img",
     "title": "图片测试",
     "date": "2025年9月30日",
