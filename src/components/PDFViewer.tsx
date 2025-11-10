@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { ChevronLeft, ChevronRight, Download } from 'lucide-react';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -17,7 +17,7 @@ interface PDFViewerProps {
 const PDFViewer: React.FC<PDFViewerProps> = ({ file, className = '' }) => {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
-  const [scale, setScale] = useState(1.0);
+  const scale = 1.0;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
