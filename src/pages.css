@@ -361,9 +361,15 @@
 /* Resume Page */
 .resume-content {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 1fr;
   gap: 32px;
   margin-bottom: 48px;
+}
+
+@media (min-width: 1200px) {
+  .resume-content {
+    grid-template-columns: 2.5fr 1fr;
+  }
 }
 
 .resume-preview {

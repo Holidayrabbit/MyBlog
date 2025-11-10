@@ -27,67 +27,52 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px;
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  padding: 16px 24px;
+  background: var(--bg-primary);
   border-bottom: 1px solid var(--border-color);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  min-height: 52px;
+  gap: 16px;
 }
 
-.toolbar-left,
-.toolbar-center,
-.toolbar-right {
+.toolbar-section {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
-.toolbar-center {
-  flex: 1;
-  justify-content: center;
-}
-
-.page-info,
-.zoom-info {
-  font-size: 14px;
-  font-weight: 500;
+.page-info {
+  font-size: 15px;
+  font-weight: 600;
   color: var(--text-primary);
-  background-color: var(--bg-tertiary);
-  padding: 6px 12px;
-  border-radius: 20px;
-  border: 1px solid var(--border-color);
-  min-width: 60px;
+  min-width: 80px;
   text-align: center;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  user-select: none;
 }
 
+/* 统一按钮样式 */
 .toolbar-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  min-width: 40px;
   background-color: var(--bg-secondary);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
-  padding: 0 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
-  height: 36px;
-  min-width: 36px;
-  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .toolbar-btn:hover:not(:disabled) {
   background-color: var(--bg-tertiary);
+  border-color: var(--text-secondary);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .toolbar-btn:active:not(:disabled) {
@@ -95,33 +80,8 @@
 }
 
 .toolbar-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
-  transform: none;
-}
-
-.toolbar-btn.download-btn {
-  background-color: var(--accent-orange);
-  color: white;
-  border: 1px solid var(--accent-orange);
-  height: 36px;
-  min-width: 36px;
-  padding: 0 12px;
-  box-sizing: border-box;
-}
-
-.toolbar-btn.download-btn:hover {
-  background-color: var(--accent-orange-hover);
-  border-color: var(--accent-orange-hover);
-}
-
-.toolbar-btn.reset-btn {
-  background-color: var(--text-primary);
-  color: var(--bg-primary);
-}
-
-.toolbar-btn.reset-btn:hover {
-  background-color: var(--text-secondary);
 }
 
 /* PDF显示区域 */
@@ -131,7 +91,7 @@
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding: 5px;
+  padding: 20px;
   overflow: auto;
   position: relative;
 }
@@ -140,6 +100,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  max-width: 100%;
 }
 
 .pdf-page {
@@ -223,30 +185,31 @@
 /* 响应式设计 */
 @media (max-width: 768px) {
   .pdf-toolbar {
-    flex-direction: column;
+    padding: 12px 16px;
     gap: 12px;
-    padding: 16px;
-    min-height: auto;
   }
 
-  .toolbar-left,
-  .toolbar-center,
-  .toolbar-right {
-    width: 100%;
-    justify-content: center;
+  .toolbar-section {
+    gap: 8px;
   }
 
-  .toolbar-center {
-    flex: none;
+  .toolbar-btn {
+    padding: 0 12px;
+    height: 36px;
+    min-width: 36px;
+  }
+
+  .btn-text {
+    display: none;
+  }
+
+  .page-info {
+    font-size: 14px;
+    min-width: 70px;
   }
 
   .pdf-display {
     padding: 10px;
-  }
-
-  .toolbar-btn {
-    flex: 1;
-    max-width: 100px;
   }
 }
 
@@ -255,20 +218,14 @@
     min-height: 500px;
   }
 
-  .toolbar-btn {
-    padding: 6px 8px;
-    font-size: 12px;
+  .pdf-toolbar {
+    flex-direction: column;
+    padding: 12px;
   }
 
-  .toolbar-btn span {
-    display: none;
-  }
-
-  .page-info,
-  .zoom-info {
-    font-size: 12px;
-    padding: 4px 8px;
-    min-width: 50px;
+  .toolbar-section {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -289,6 +246,7 @@
 
 .react-pdf__Page__canvas {
   max-width: 100%;
+  width: 100% !important;
   height: auto !important;
   border-radius: 4px;
 }
