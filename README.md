@@ -139,6 +139,11 @@ git push
 
 访问地址：`https://YOUR_USERNAME.github.io/YOUR_REPO_NAME`
 
+**注意**：项目使用 HashRouter 进行路由管理，URL 格式为：
+- 首页: `https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/#/`
+- 文章: `https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/#/articles`
+- 学术: `https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/#/academic`
+
 ### 其他部署方式
 
 - **Vercel**: 连接GitHub仓库，自动部署
