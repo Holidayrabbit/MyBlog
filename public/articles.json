@@ -1,9 +1,22 @@
 [
   {
+    "id": "LTR_tutorial",
+    "title": "从排序算法到 LambdaRank：让机器学会“谁更重要”",
+    "date": "2025年11月12日",
+    "excerpt": "对排序学习的简介",
+    "tags": [
+      "搜索算法",
+      "排序",
+      "机器学习"
+    ],
+    "filename": "LTR_tutorial.md",
+    "dateSort": "2025-11-12"
+  },
+  {
     "id": "context_engineering",
-    "title": "Context Engineering Discussion by Lance and Pete",
+    "title": "Context Engineering Discussion by Lance and Peak",
     "date": "2025年10月16日",
-    "excerpt": "Lance and Pete discuss Context Engineering",
+    "excerpt": "Lance and Peak discuss Context Engineering",
     "tags": [
       "Agent",
       "Context Engineering",
