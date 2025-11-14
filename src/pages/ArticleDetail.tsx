@@ -3,6 +3,9 @@ import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 import { ArrowLeft, Calendar, Tag } from 'lucide-react';
 import { useArticle } from '../hooks/useArticles';
 import { fetchArticleContent } from '../utils/articles';
@@ -93,8 +96,9 @@ const ArticleDetail: React.FC = () => {
               <p>文章摘要：{article.excerpt}</p>
             </div>
           ) : (
-            <ReactMarkdown 
-              remarkPlugins={[remarkGfm]}
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm, remarkMath]}
+              rehypePlugins={[rehypeKatex]}
               components={{
                 h1: ({ children }) => <h1 className="md-h1">{children}</h1>,
                 h2: ({ children }) => <h2 className="md-h2">{children}</h2>,
@@ -111,6 +115,12 @@ const ArticleDetail: React.FC = () => {
                 img: ({ src, alt }) => (
                   <img src={src} alt={alt} className="md-img" loading="lazy" />
                 ),
+                table: ({ children }) => <table className="md-table">{children}</table>,
+                thead: ({ children }) => <thead className="md-thead">{children}</thead>,
+                tbody: ({ children }) => <tbody className="md-tbody">{children}</tbody>,
+                tr: ({ children }) => <tr className="md-tr">{children}</tr>,
+                th: ({ children }) => <th className="md-th">{children}</th>,
+                td: ({ children }) => <td className="md-td">{children}</td>,
               }}
             >
               {content}
