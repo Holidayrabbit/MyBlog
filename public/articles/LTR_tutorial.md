@@ -13,6 +13,8 @@ excerpt: "对排序学习的简介"
 这类问题被称为 **学习排序（Learning to Rank, LTR）**。
 本文将从排序算法的基本概念讲起，逐步介绍 **RankNet** 的思路，并深入讲解 **LambdaRank** 如何在此基础上改进，使模型能直接优化排序指标（如 NDCG）。
 
+![排序算法](/MyBlog/images/LTR_tutorial/image.png)
+
 ---
 
 ## 一、排序算法的动机
