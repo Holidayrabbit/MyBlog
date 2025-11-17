@@ -1,5 +1,17 @@
 [
   {
+    "id": "js-ts-core-mindset",
+    "title": "JS / TS 核心思维速学：从混乱到可控",
+    "date": "2025年11月17日",
+    "excerpt": "这是一篇介绍javascript和typescript核心设计思路的文章。",
+    "tags": [
+      "JavaScript",
+      "TypeScript"
+    ],
+    "filename": "js-ts-core-mindset.md",
+    "dateSort": "2025-11-17"
+  },
+  {
     "id": "LTR_tutorial",
     "title": "从排序算法到 LambdaRank：让机器学会“谁更重要”",
     "date": "2025年11月12日",
