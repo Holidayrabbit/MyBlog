@@ -1,5 +1,18 @@
 [
   {
+    "id": "ReAct_tutorial",
+    "title": "ReAct 智能体框架",
+    "date": "2025年11月17日",
+    "excerpt": "这是一篇介绍ReAct智能体框架的文章。",
+    "tags": [
+      "ReAct",
+      "智能体",
+      "大语言模型"
+    ],
+    "filename": "ReAct_tutorial.md",
+    "dateSort": "2025-11-17"
+  },
+  {
     "id": "js-ts-core-mindset",
     "title": "JS / TS 核心思维速学：从混乱到可控",
     "date": "2025年11月17日",
