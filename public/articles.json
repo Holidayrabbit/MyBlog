@@ -1,5 +1,19 @@
 [
   {
+    "id": "claude-agent-sdk",
+    "title": "Claude Agent SDK:给AI一台电脑",
+    "date": "2026年1月5日",
+    "excerpt": "Anthropic 最新推出的 Claude Agent SDK,核心理念是让 AI 像人类一样操作电脑。这篇文章深入解析它的设计哲学和与其他 Agent 框架的本质区别。",
+    "tags": [
+      "Claude",
+      "Agent",
+      "AI",
+      "SDK"
+    ],
+    "filename": "claude-agent-sdk.md",
+    "dateSort": "2026-01-05"
+  },
+  {
     "id": "claude-code-skills-guide",
     "title": "Claude Code Skills 使用指南",
     "date": "2025年12月24日",
