@@ -1,0 +1,143 @@
+/* CodeBlock.css - 代码块组件样式 */
+
+.code-block-container {
+  margin: 24px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+}
+
+/* 代码块顶部工具栏 */
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* 语言标签 */
+.code-block-language {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+/* 复制按钮 */
+.code-block-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.code-block-copy-btn:hover {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+.code-block-copy-btn:active {
+  transform: scale(0.98);
+}
+
+.code-block-copy-btn svg {
+  flex-shrink: 0;
+}
+
+/* 代码高亮器容器 */
+.code-block-container pre {
+  margin: 0 !important;
+  padding: 16px !important;
+  overflow-x: auto;
+
+  /* 自定义滚动条 */
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-secondary) var(--bg-tertiary);
+}
+
+/* Webkit 浏览器滚动条样式 */
+.code-block-container pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-block-container pre::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+}
+
+.code-block-container pre::-webkit-scrollbar-thumb {
+  background: var(--text-secondary);
+  border-radius: 4px;
+}
+
+.code-block-container pre::-webkit-scrollbar-thumb:hover {
+  background: var(--text-primary);
+}
+
+/* 行号样式调整 */
+.code-block-container .linenumber {
+  color: var(--text-secondary);
+  opacity: 0.5;
+  user-select: none;
+  min-width: 2.5em;
+  padding-right: 1em;
+  text-align: right;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .code-block-container {
+    margin: 16px -16px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .code-block-header {
+    padding: 6px 12px;
+  }
+
+  .code-block-language {
+    font-size: 11px;
+  }
+
+  .code-block-copy-btn {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  .code-block-copy-btn span {
+    display: none;
+  }
+
+  .code-block-container pre {
+    padding: 12px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* 行内代码保持原样式 */
+.md-code {
+  background-color: var(--bg-tertiary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}

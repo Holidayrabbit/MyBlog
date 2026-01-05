@@ -167,6 +167,206 @@ function example() {
 总结要点和关键信息...
 ```
 
+## 💻 代码块增强功能
+
+### 📋 功能特性
+
+MyBlog支持高级代码块渲染功能，为你的技术文章提供专业的代码展示效果：
+
+✅ **语法高亮** - 支持50+编程语言的语法高亮
+✅ **一键复制** - 点击按钮即可复制代码到剪贴板
+✅ **语言标签** - 自动显示代码语言标识
+✅ **行号显示** - 超过10行的代码自动显示行号
+✅ **行高亮** - 支持高亮指定的代码行
+✅ **主题适配** - 自动适配Light/Dark主题
+✅ **响应式设计** - 移动端友好的滚动和显示
+
+### 🎨 基本用法
+
+#### 标准代码块
+
+````markdown
+```javascript
+function hello() {
+  console.log("Hello World!");
+}
+```
+````
+
+效果：
+- 自动语法高亮
+- 显示 "JAVASCRIPT" 语言标签
+- 右上角显示复制按钮
+
+#### 行内代码
+
+使用单个反引号包裹行内代码：
+
+```markdown
+这是一段包含 `const name = "value"` 的行内代码。
+```
+
+### 🎯 高级功能
+
+#### 1️⃣ 行高亮
+
+使用 `{行号}` 语法高亮特定行：
+
+````markdown
+```javascript{2,4-6}
+function calculate(a, b) {
+  const sum = a + b;        // 高亮这行
+  const product = a * b;
+  const difference = a - b;  // 高亮这行
+  const quotient = a / b;    // 高亮这行
+  const remainder = a % b;   // 高亮这行
+  return { sum, product };
+}
+```
+````
+
+**语法规则：**
+- `{2}` - 高亮第2行
+- `{1,3,5}` - 高亮第1、3、5行
+- `{2-5}` - 高亮第2到5行
+- `{1,3-5,8}` - 组合使用
+
+#### 2️⃣ 自动行号
+
+代码超过10行时自动显示行号：
+
+````markdown
+```python
+# 这个代码块有很多行
+def fibonacci(n):
+    if n <= 1:
+        return n
+    a, b = 0, 1
+    for _ in range(n - 1):
+        a, b = b, a + b
+    return b
+
+# 测试函数
+for i in range(15):
+    print(f"fib({i}) = {fibonacci(i)}")
+```
+````
+
+### 📚 支持的语言
+
+系统支持所有主流编程语言，以下是常用语言的标识符：
+
+| 语言 | 标识符 | 显示名称 |
+|------|--------|----------|
+| JavaScript | `js`, `javascript` | JavaScript |
+| TypeScript | `ts`, `typescript` | TypeScript |
+| Python | `py`, `python` | Python |
+| Java | `java` | Java |
+| C++ | `cpp`, `c++` | C++ |
+| Go | `go` | Go |
+| Rust | `rs`, `rust` | Rust |
+| HTML | `html` | HTML |
+| CSS | `css` | CSS |
+| JSON | `json` | JSON |
+| Shell | `sh`, `bash`, `shell` | Shell/Bash |
+| SQL | `sql` | SQL |
+| Markdown | `md`, `markdown` | Markdown |
+
+**完整语言列表**：JavaScript (JSX), TypeScript (TSX), Python, Java, C, C++, C#, Go, Rust, Ruby, PHP, Swift, Kotlin, Dart, HTML, CSS, SCSS, JSON, YAML, Markdown, SQL, Bash, PowerShell, Dockerfile, GraphQL, XML等。
+
+### 🎨 主题适配
+
+代码块会自动适配站点的Light/Dark主题：
+
+- **Light主题** - 使用 One Light 配色方案
+- **Dark主题** - 使用 One Dark 配色方案
+
+切换主题时，代码块颜色会实时更新，无需刷新页面。
+
+### 📱 响应式设计
+
+代码块在移动设备上的特殊优化：
+
+- 自动调整字体大小
+- 优化的横向滚动
+- 精简的工具栏显示
+- 移动端复制按钮只显示图标
+
+### ✨ 代码示例
+
+#### Python示例
+
+````markdown
+```python{5-8}
+import asyncio
+
+async def fetch_data(url):
+    print(f"Fetching {url}...")
+    await asyncio.sleep(2)
+    return f"Data from {url}"
+
+async def main():
+    urls = ["api.com/1", "api.com/2", "api.com/3"]
+    tasks = [fetch_data(url) for url in urls]
+    results = await asyncio.gather(*tasks)
+    return results
+
+asyncio.run(main())
+```
+````
+
+#### React示例
+
+````markdown
+```tsx{8-12}
+import React, { useState } from 'react';
+
+interface TodoProps {
+  initialTodos: string[];
+}
+
+const TodoList: React.FC<TodoProps> = ({ initialTodos }) => {
+  const [todos, setTodos] = useState(initialTodos);
+  const [input, setInput] = useState('');
+
+  const addTodo = () => {
+    setTodos([...todos, input]);
+    setInput('');
+  };
+
+  return (
+    <div>
+      <input value={input} onChange={e => setInput(e.target.value)} />
+      <button onClick={addTodo}>Add</button>
+      <ul>
+        {todos.map((todo, i) => <li key={i}>{todo}</li>)}
+      </ul>
+    </div>
+  );
+};
+```
+````
+
+### 💡 最佳实践
+
+1. **选择正确的语言标识符** - 使用准确的语言标识符以获得最佳的语法高亮效果
+2. **合理使用行高亮** - 只高亮关键代码行，避免过度使用
+3. **添加注释** - 在复杂代码中添加清晰的注释说明
+4. **保持代码简洁** - 单个代码块不要太长，必要时分成多个小块
+5. **测试复制功能** - 确保复制的代码可以直接运行
+
+### 🔧 技术实现
+
+代码块功能基于以下技术栈：
+
+- **react-syntax-highlighter** - 核心语法高亮库
+- **Prism** - 语法高亮引擎
+- **One Dark / One Light** - 主题配色
+- **lucide-react** - 复制按钮图标
+- **Navigator Clipboard API** - 剪贴板功能
+
+---
+
 ## 🎛️ 高级功能
 
 ### Frontmatter支持的字段

@@ -9,6 +9,7 @@ import 'katex/dist/katex.min.css';
 import { ArrowLeft, Calendar, Tag } from 'lucide-react';
 import { useArticle } from '../hooks/useArticles';
 import { fetchArticleContent } from '../utils/articles';
+import CodeBlock from '../components/CodeBlock';
 
 const ArticleDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -104,10 +105,14 @@ const ArticleDetail: React.FC = () => {
                 h2: ({ children }) => <h2 className="md-h2">{children}</h2>,
                 h3: ({ children }) => <h3 className="md-h3">{children}</h3>,
                 p: ({ children }) => <p className="md-p">{children}</p>,
-                code: ({ children, className }) => (
-                  <code className={`md-code ${className || ''}`}>{children}</code>
-                ),
-                pre: ({ children }) => <pre className="md-pre">{children}</pre>,
+                code: ({ children, className, ...props }) => {
+                  const inline = !className;
+                  return (
+                    <CodeBlock className={className} inline={inline} {...props}>
+                      {children}
+                    </CodeBlock>
+                  );
+                },
                 ul: ({ children }) => <ul className="md-ul">{children}</ul>,
                 ol: ({ children }) => <ol className="md-ol">{children}</ol>,
                 li: ({ children }) => <li className="md-li">{children}</li>,

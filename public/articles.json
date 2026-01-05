@@ -99,5 +99,18 @@
     ],
     "filename": "时间的囚徒.md",
     "dateSort": "2025-09-28"
+  },
+  {
+    "id": "code-block-demo",
+    "title": "代码块增强功能演示",
+    "date": "2025年1月5日",
+    "excerpt": "展示MyBlog代码块的所有增强功能，包括语法高亮、复制功能、行号显示和行高亮等特性。",
+    "tags": [
+      "演示",
+      "代码块",
+      "语法高亮"
+    ],
+    "filename": "code-block-demo.md",
+    "dateSort": "2025-01-05"
   }
 ]
