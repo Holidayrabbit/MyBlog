@@ -1,5 +1,20 @@
 [
   {
+    "id": "opencode-tech-analysis",
+    "title": "OpenCode：开源的 AI 编程助手技术解析",
+    "date": "2026年1月19日",
+    "excerpt": "深入分析开源 AI 编程助手 OpenCode 的架构设计、Agent 实现和前端工程化技术",
+    "tags": [
+      "OpenCode",
+      "AI",
+      "Agent",
+      "TypeScript",
+      "Vercel AI SDK"
+    ],
+    "filename": "opencode-tech-analysis.md",
+    "dateSort": "2026-01-19"
+  },
+  {
     "id": "claude-agent-sdk",
     "title": "Claude Agent SDK:给AI一台电脑",
     "date": "2026年1月5日",
