@@ -1,5 +1,19 @@
 [
   {
+    "id": "openclaw-deep-dive",
+    "title": "OpenClaw：重新定义AI Agent的四个维度",
+    "date": "2026年2月8日",
+    "excerpt": "OpenClaw在短短两个月内从9000星飙升到10万星，成为AI Agent领域最火的开源项目。它的成功不是偶然，而是在架构、记忆、设计和应用四个维度上都做对了选择。",
+    "tags": [
+      "AI",
+      "Agent",
+      "OpenClaw",
+      "架构设计"
+    ],
+    "filename": "openclaw-deep-dive.md",
+    "dateSort": "2026-02-08"
+  },
+  {
     "id": "opencode-tech-analysis",
     "title": "OpenCode：开源的 AI 编程助手技术解析",
     "date": "2026年1月19日",
