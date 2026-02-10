@@ -1,4 +1,9 @@
-# 因果推理的缺失环节：CLBenchmark揭示大语言模型的认知盲区
+---
+title: "因果推理的缺失环节：CLBenchmark揭示大语言模型的认知盲区"
+date: "2026-2-10"
+tags: ["LLM"]
+excerpt: "论文 CL-BENCH: A BENCHMARK FOR CONTEXT LEARNING 背景介绍"
+---
 
 ## 引言：当相关性遇见因果关系
 
@@ -211,11 +216,3 @@ CLBenchmark是迈向因果AI的重要一步。它提醒我们：**相关性是�
 
 而这，正是因果推理的魅力所在。
 
----
-
-**论文信息**：
-- 标题：CLBenchmark: A Comprehensive Benchmark for Causal Learning in Language Models
-- 作者：Minglai Dong, Xingyu Li, Yining Wang, et al.
-- 会议：ICLR 2025
-- 链接：https://arxiv.org/abs/2406.18695
-- 代码：https://github.com/CLAIRE-LLU/CLBenchmark
