@@ -1,13 +1,9 @@
 ---
 title: π：极简主义者的Agent框架
-date: 2026年2月11日
+date: "2026-02-21"
 excerpt: 在大模型Agent框架百花齐放的今天，π选择了一条不同的道路：极简、可扩展、专注核心能力。这篇文章深入解析π框架的设计哲学和核心实现。
-tags:
-  - Agent
-  - π
-  - TypeScript
-  - AI
-  - 架构设计
+tags: ["Agent","TypeScript"]
+
 ---
 
 ## 引言
