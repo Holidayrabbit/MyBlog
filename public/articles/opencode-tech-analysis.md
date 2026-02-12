@@ -1,7 +1,7 @@
 ---
 title: "OpenCode：开源的 AI 编程助手技术解析"
 date: "2026-01-19"
-tags: ["OpenCode", "AI", "Agent", "TypeScript", "Vercel AI SDK"]
+tags: ["Agent", "TypeScript", "SDK"]
 excerpt: "深入分析开源 AI 编程助手 OpenCode 的架构设计、Agent 实现和前端工程化技术"
 ---
 

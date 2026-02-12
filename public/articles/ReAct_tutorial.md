@@ -1,7 +1,7 @@
 ---
 title: "ReAct 智能体框架"
 date: "2025-11-17"
-tags: ["ReAct", "智能体", "大语言模型"]
+tags: ["ReAct", "Agent", "LLM"]
 excerpt: "这是一篇介绍ReAct智能体框架的文章。"
 ---
 

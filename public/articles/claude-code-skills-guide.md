@@ -1,7 +1,7 @@
 ---
 title: "Claude Code Skills 使用指南"
 date: "2025-12-24"
-tags: ["Claude Code", "AI", "开发工具", "Skills"]
+tags: ["Claude Code", "开发工具", "Skills"]
 excerpt: "全面介绍 Claude Code 中的 Skill 功能：如何使用、创建和分享技能扩展，让 AI 编程助手更懂你的需求。"
 ---
 

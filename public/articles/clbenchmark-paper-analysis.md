@@ -1,7 +1,7 @@
 ---
 title: "因果推理的缺失环节：CLBenchmark揭示大语言模型的认知盲区"
 date: "2026-2-10"
-tags: ["LLM"]
+tags: ["LLM", "paper"]
 excerpt: "论文 CL-BENCH: A BENCHMARK FOR CONTEXT LEARNING 背景介绍"
 ---
 

@@ -1,15 +1,25 @@
 [
   {
+    "id": "full-self-coding-intro",
+    "title": "Full Self Coding：让100个AI Agent并行为你写代码",
+    "date": "2026年2月12日",
+    "excerpt": "无需提示词、无需指令、无需计划，让100~1000个AI代理并行工作，自动解决代码库中的所有问题",
+    "tags": [
+      "开源",
+      "Docker",
+      "Agent"
+    ],
+    "filename": "full-self-coding-intro.md",
+    "dateSort": "2026-02-12"
+  },
+  {
     "id": "pi-agent-framework",
     "title": "π：极简主义者的Agent框架",
     "date": "2026年2月11日",
     "excerpt": "在大模型Agent框架百花齐放的今天，π选择了一条不同的道路：极简、可扩展、专注核心能力。这篇文章深入解析π框架的设计哲学和核心实现。",
     "tags": [
       "Agent",
-      "π",
-      "TypeScript",
-      "AI",
-      "架构设计"
+      "TypeScript"
     ],
     "filename": "pi-agent-framework.md",
     "dateSort": "2026-02-11"
@@ -20,7 +30,8 @@
     "date": "2026年2月10日",
     "excerpt": "论文 CL-BENCH: A BENCHMARK FOR CONTEXT LEARNING 背景介绍",
     "tags": [
-      "LLM"
+      "LLM",
+      "paper"
     ],
     "filename": "clbenchmark-paper-analysis.md",
     "dateSort": "2026-02-09"
@@ -31,10 +42,8 @@
     "date": "2026年2月8日",
     "excerpt": "OpenClaw在短短两个月内从9000星飙升到10万星，成为AI Agent领域最火的开源项目。它的成功不是偶然，而是在架构、记忆、设计和应用四个维度上都做对了选择。",
     "tags": [
-      "AI",
       "Agent",
-      "OpenClaw",
-      "架构设计"
+      "Software engineering"
     ],
     "filename": "openclaw-deep-dive.md",
     "dateSort": "2026-02-08"
@@ -45,11 +54,9 @@
     "date": "2026年1月19日",
     "excerpt": "深入分析开源 AI 编程助手 OpenCode 的架构设计、Agent 实现和前端工程化技术",
     "tags": [
-      "OpenCode",
-      "AI",
       "Agent",
       "TypeScript",
-      "Vercel AI SDK"
+      "SDK"
     ],
     "filename": "opencode-tech-analysis.md",
     "dateSort": "2026-01-19"
@@ -62,7 +69,6 @@
     "tags": [
       "Claude",
       "Agent",
-      "AI",
       "SDK"
     ],
     "filename": "claude-agent-sdk.md",
@@ -75,7 +81,6 @@
     "excerpt": "全面介绍 Claude Code 中的 Skill 功能：如何使用、创建和分享技能扩展，让 AI 编程助手更懂你的需求。",
     "tags": [
       "Claude Code",
-      "AI",
       "开发工具",
       "Skills"
     ],
@@ -89,8 +94,8 @@
     "excerpt": "这是一篇介绍ReAct智能体框架的文章。",
     "tags": [
       "ReAct",
-      "智能体",
-      "大语言模型"
+      "Agent",
+      "LLM"
     ],
     "filename": "ReAct_tutorial.md",
     "dateSort": "2025-11-17"
@@ -152,8 +157,7 @@
     "tags": [
       "Python",
       "uv",
-      "环境管理",
-      "机器学习"
+      "环境管理"
     ],
     "filename": "uv-intro.md",
     "dateSort": "2025-09-28"

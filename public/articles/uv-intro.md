@@ -1,7 +1,7 @@
 ---
 title: "再见conda - - uv快速使用教程"
 date: "2025-09-28"
-tags: ["Python", "uv", "环境管理", "机器学习"]
+tags: ["Python", "uv", "环境管理"]
 excerpt: "从一个机器学习项目入手，如何从零开始使用 uv"
 ---
 

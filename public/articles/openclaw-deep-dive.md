@@ -1,7 +1,7 @@
 ---
 title: "OpenClaw：重新定义AI Agent的四个维度"
 date: "2026-02-08"
-tags: ["AI", "Agent", "OpenClaw", "架构设计"]
+tags: ["Agent", "Software engineering"]
 excerpt: "OpenClaw在短短两个月内从9000星飙升到10万星，成为AI Agent领域最火的开源项目。它的成功不是偶然，而是在架构、记忆、设计和应用四个维度上都做对了选择。"
 ---
 
