@@ -1,5 +1,42 @@
 [
   {
+    "id": "agent-context-engineering",
+    "title": "上下文工程：Agent系统设计的核心方法论",
+    "date": "2026年2月25日",
+    "excerpt": "上下文工程 ≠ 提示工程。本文系统性地讲解Agent系统设计中的核心方法论，从上下文组成、退化模式、压缩优化，到多智能体架构、记忆系统、工具设计和项目开发流程。",
+    "tags": [
+      "Agent",
+      "Context Engineering",
+      "Architecture"
+    ],
+    "filename": "agent-context-engineering.md",
+    "dateSort": "2026-02-25"
+  },
+  {
+    "id": "coding-agent-design-philosophy",
+    "title": "Coding Agent 设计哲学：从代码补丁工到资深工程师的进化",
+    "date": "2026年2月23日",
+    "excerpt": "在 AI 辅助编程时代，一个真正强大的 Coding Agent 不应满足于做按指令办事的“代码补丁工”，而应该具备资深工程师的心智模型。本文基于业界领先实践总结了一套核心的 Agent 设计哲学。",
+    "tags": [
+      "Agent"
+    ],
+    "filename": "coding-agent-design-philosophy.md",
+    "dateSort": "2026-02-23"
+  },
+  {
+    "id": "llmdroid-paper-review",
+    "title": "LLMDroid：用大语言模型高效增强移动应用GUI测试覆盖率",
+    "date": "2026年2月21日",
+    "excerpt": "深度解析LLMDroid框架如何通过自主探索与LLM引导的双阶段策略，在降低成本的同时显著提升Android应用测试覆盖率",
+    "tags": [
+      "paper",
+      "Software",
+      "LLM"
+    ],
+    "filename": "llmdroid-paper-review.md",
+    "dateSort": "2026-02-21"
+  },
+  {
     "id": "full-self-coding-intro",
     "title": "Full Self Coding：让100个AI Agent并行为你写代码",
     "date": "2026年2月12日",
