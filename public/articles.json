@@ -1,5 +1,19 @@
 [
   {
+    "id": "ai-agent-infrastructure-practice",
+    "title": "AI Agent Infrastructure 实战: Browser Use 如何从 AWS Lambda 演进到 Unikraft",
+    "date": "2026年3月3日",
+    "excerpt": "当 AI Agent 需要执行代码时,如何确保安全、高效地运行?本文通过 Browser Use 的真实案例,深入讲解从 AWS Lambda 到 Unikraft micro-VMs 的架构演进,揭示沙箱隔离、控制平面设计和安全最佳实践。",
+    "tags": [
+      "Agent",
+      "Infrastructure",
+      "Security",
+      "Architecture"
+    ],
+    "filename": "ai-agent-infrastructure-practice.md",
+    "dateSort": "2026-03-03"
+  },
+  {
     "id": "agent-context-engineering",
     "title": "上下文工程：Agent系统设计的核心方法论",
     "date": "2026年2月25日",
