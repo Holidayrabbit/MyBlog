@@ -74,13 +74,7 @@ const Admin: React.FC = () => {
   if (!session) {
     return (
       <div className="admin">
-        <AdminLogin
-          initialError={authError}
-          onLogin={(token, user) => {
-            setAuthError(null);
-            setSession({ token, user });
-          }}
-        />
+        <AdminLogin initialError={authError} />
       </div>
     );
   }

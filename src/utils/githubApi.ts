@@ -35,10 +35,6 @@ export const OAUTH_WORKER_URL: string = 'https://myblog-oauth.holidayyuetwo.work
 const OAUTH_STATE_KEY = 'myblog_oauth_state';
 const OAUTH_ERROR_KEY = 'myblog_oauth_error';
 
-export function oauthConfigured(): boolean {
-  return OAUTH_WORKER_URL !== '';
-}
-
 function randomState(): string {
   const bytes = new Uint8Array(16);
   crypto.getRandomValues(bytes);
@@ -49,7 +45,7 @@ function randomState(): string {
  * 跳转到 Worker 开始 GitHub 授权（点击"使用 GitHub 登录"时调用）
  */
 export function startOAuthLogin(): void {
-  if (!oauthConfigured()) return;
+  if (!OAUTH_WORKER_URL) return;
   const state = randomState();
   sessionStorage.setItem(OAUTH_STATE_KEY, state);
   window.location.href = `${OAUTH_WORKER_URL}/auth?state=${state}`;

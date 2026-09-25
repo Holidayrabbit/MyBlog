@@ -8,14 +8,8 @@
 
 ### 登录
 
-两种方式任选，均会校验账号必须是仓库所有者本人，非本人账号直接拒绝：
-
-| 方式 | 前提 | 说明 |
-|------|------|------|
-| GitHub 一键登录 | 部署 OAuth 中转（[cloudflare-worker/README.md](../cloudflare-worker/README.md)，约 10 分钟一次性配置） | 点击按钮 → GitHub 授权 → 自动返回 |
-| Token 登录 | 创建 Fine-grained Token：仅授权 MyBlog 仓库，Contents 设为 Read and write | 粘贴后保持登录至 Token 过期 |
-
-Token 只保存在你自己的浏览器 localStorage 里，仅发送给 GitHub 官方 API；怀疑泄露可在 GitHub 设置中随时撤销。
+点击"使用 GitHub 登录"，跳转 GitHub 授权后自动返回。依赖 Cloudflare Worker 中转（一次性配置，见
+[cloudflare-worker/README.md](../cloudflare-worker/README.md)）。Worker 与前端都会校验账号必须是仓库所有者本人，非本人账号直接拒绝。
 
 ### 功能
 
@@ -54,4 +48,4 @@ excerpt: "摘要"              # 缺省截取正文前 200 字
 
 - **图片显示不出来**：确认引用路径以 `/MyBlog/` 开头（与 `vite.config.ts` 的 `base` 一致），且文件名大小写与实际文件一致
 - **文章没出现在线上列表里**：等 Actions 构建完成（后台的部署状态徽章会显示进度）
-- **本地开发时"使用 GitHub 登录"走不完**：OAuth 回调固定指向线上站点，本地请用 Token 登录
+- **本地开发时无法走 OAuth**：GitHub 回调固定指向线上站点，调试后台请直接访问线上地址

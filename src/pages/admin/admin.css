@@ -162,22 +162,15 @@
 }
 
 .admin-login-title {
-  margin: 0 0 6px;
+  margin: 0 0 24px;
   font-size: 22px;
   color: var(--text-primary);
 }
 
-.admin-login-subtitle {
-  margin: 0 0 24px;
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.admin-login-form {
+.admin-login-actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  text-align: left;
 }
 
 .admin-login-oauth {
@@ -185,73 +178,6 @@
   justify-content: center;
   padding: 11px 14px;
   font-size: 15px;
-}
-
-.admin-login-divider {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 4px 0;
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.admin-login-divider::before,
-.admin-login-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border-color);
-}
-
-.admin-login-form .admin-btn-primary {
-  justify-content: center;
-}
-
-.admin-help-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin: 18px auto 0;
-  font-size: 13px;
-  color: var(--text-secondary);
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.admin-help-toggle:hover {
-  color: var(--accent-orange);
-}
-
-.admin-chevron-up {
-  transform: rotate(180deg);
-}
-
-.admin-help {
-  margin: 14px 0 0;
-  padding: 14px 16px 14px 32px;
-  text-align: left;
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--text-secondary);
-  background: var(--bg-tertiary);
-  border-radius: 8px;
-}
-
-.admin-help a {
-  color: var(--accent-orange);
-}
-
-.admin-ext {
-  font-size: 11px;
-}
-
-.admin-login-note {
-  margin: 18px 0 0;
-  font-size: 12px;
-  line-height: 1.7;
-  color: var(--text-muted);
 }
 
 /* ---- 列表页 ---- */
