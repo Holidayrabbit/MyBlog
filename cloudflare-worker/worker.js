@@ -86,9 +86,14 @@ async function handle(request, env) {
     }
 
     // 1. code 换 access_token（secret 只存在这里）
+    // GitHub 要求请求必须带 User-Agent，否则会被边缘拦截返回非 JSON 的 Forbidden 页
     const tokenRes = await fetch(GITHUB_TOKEN, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'User-Agent': 'myblog-oauth-bridge',
+      },
       body: JSON.stringify({
         client_id: env.GITHUB_CLIENT_ID,
         client_secret: env.GITHUB_CLIENT_SECRET,
@@ -107,6 +112,7 @@ async function handle(request, env) {
       headers: {
         Authorization: `Bearer ${tokenData.access_token}`,
         Accept: 'application/vnd.github+json',
+        'User-Agent': 'myblog-oauth-bridge',
       },
     });
     const user = await readJson(userRes, 'GitHub 用户信息接口');
