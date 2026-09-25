@@ -24,7 +24,8 @@ interface DraftState {
 }
 
 const DRAFT_KEY = 'myblog_admin_draft:current';
-const VDITOR_CDN = 'https://cdn.jsdelivr.net/npm/vditor@4.0.0';
+// Vditor 静态资源自托管在 public/vditor（解析器/高亮/公式），不依赖外部 CDN
+const VDITOR_CDN = `${import.meta.env.BASE_URL}vditor`;
 
 function todayString(): string {
   const d = new Date();
