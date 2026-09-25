@@ -102,12 +102,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, user, onEdit, on
 
   const handleDelete = async (article: AdminArticle) => {
     const title = article.frontmatter.title || article.filename;
-    if (!window.confirm(`确定删除文章《${title}》吗？\n\n这会创建一个删除 commit 并触发重新部署，可用 git 历史恢复。`)) {
+    if (!window.confirm(`确定删除文章《${title}》吗？\n\n文章及其图片目录会被一起删除（一个 commit）并触发重新部署，可用 git 历史恢复。`)) {
       return;
     }
     setDeleting(article.filename);
     try {
-      await deleteAdminArticle(token, article.filename, article.sha, title);
+      await deleteAdminArticle(token, article.filename, title);
       await load();
     } catch (err) {
       setError(err instanceof GitHubError ? err.message : '删除失败');

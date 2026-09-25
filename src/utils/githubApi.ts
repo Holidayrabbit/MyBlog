@@ -416,26 +416,72 @@ export async function saveArticleCommit(
 }
 
 /**
- * 删除文章
+ * 删除文章，并将其图片目录 public/images/<articleId>/ 下的图片一并删除（同一个 commit）。
+ * Git Trees API 中把条目的 sha 置为 null 即表示删除该路径（需确保文件当前存在）。
  */
 export async function deleteAdminArticle(
   token: string,
   filename: string,
-  sha: string,
   title?: string,
 ): Promise<void> {
-  await ghFetch(
-    `/repos/${OWNER}/${REPO}/contents/${ARTICLES_DIR}/${encodeURIComponent(filename)}`,
-    token,
-    {
-      method: 'DELETE',
+  const articleId = filename.replace(/\.md$/, '');
+
+  // 列出图片目录下的文件（目录不存在 = 无图片，404 视为正常）
+  let imagePaths: string[] = [];
+  try {
+    const imageFiles = await ghFetch<ContentInfo[]>(
+      `/repos/${OWNER}/${REPO}/contents/${IMAGES_DIR}/${encodeURIComponent(articleId)}?ref=${BRANCH}`,
+      token,
+    );
+    imagePaths = imageFiles.filter(f => f.type === 'file').map(f => f.path);
+  } catch (err) {
+    if (!(err instanceof GitHubError && err.status === 404)) throw err;
+  }
+
+  const titleText = title || filename;
+  const message =
+    imagePaths.length > 0
+      ? `chore: 删除文章《${titleText}》及 ${imagePaths.length} 张图片`
+      : `chore: 删除文章《${titleText}》`;
+
+  const getHead = () =>
+    ghFetch<{ object: { sha: string } }>(`/repos/${OWNER}/${REPO}/git/ref/heads/${BRANCH}`, token);
+
+  let head = await getHead();
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const headCommit = await ghFetch<{ tree: { sha: string } }>(
+      `/repos/${OWNER}/${REPO}/git/commits/${head.object.sha}`,
+      token,
+    );
+    const tree = await ghFetch<{ sha: string }>(`/repos/${OWNER}/${REPO}/git/trees`, token, {
+      method: 'POST',
       body: {
-        message: `chore: 删除文章《${title || filename}》`,
-        sha,
-        branch: BRANCH,
+        base_tree: headCommit.tree.sha,
+        tree: [
+          { path: `${ARTICLES_DIR}/${filename}`, sha: null },
+          ...imagePaths.map(path => ({ path, sha: null })),
+        ],
       },
-    },
-  );
+    });
+    const commit = await ghFetch<{ sha: string; html_url: string }>(
+      `/repos/${OWNER}/${REPO}/git/commits`,
+      token,
+      { method: 'POST', body: { message, tree: tree.sha, parents: [head.object.sha] } },
+    );
+
+    try {
+      await ghFetch(`/repos/${OWNER}/${REPO}/git/refs/heads/${BRANCH}`, token, {
+        method: 'PATCH',
+        body: { sha: commit.sha, force: false },
+      });
+      return;
+    } catch (err) {
+      const retryable = err instanceof GitHubError && (err.status === 409 || err.status === 422);
+      if (!retryable || attempt === 2) throw err;
+      head = await getHead();
+    }
+  }
+  throw new Error('删除失败：重试次数已用完');
 }
 
 export interface DeployRun {
