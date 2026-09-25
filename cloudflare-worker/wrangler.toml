@@ -1,0 +1,8 @@
+name = "myblog-oauth"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+
+# 用 wrangler CLI 部署时取消注释并填入（推荐用 Dashboard 方式则无需此文件配置）：
+# [vars]
+# GITHUB_CLIENT_ID = "你的 Client ID"
+# GITHUB_CLIENT_SECRET 用 secret 方式设置：npx wrangler secret put GITHUB_CLIENT_SECRET

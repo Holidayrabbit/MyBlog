@@ -20,14 +20,12 @@
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
     "deploy": "npm run build && gh-pages -d dist",
-    "articles:generate": "node scripts/generate-articles.js",
-    "articles:watch": "npm run articles:generate && npm run dev"
+    "articles:generate": "node scripts/generate-articles.js"
   },
   "dependencies": {
-    "@heroicons/react": "^2.2.0",
-    "@types/react-router-dom": "^5.3.3",
     "gray-matter": "^4.0.3",
     "i18next": "^25.5.2",
+    "js-yaml": "^5.4.2",
     "katex": "^0.16.25",
     "lucide-react": "^0.544.0",
     "pdfjs-dist": "^5.4.149",
@@ -44,6 +42,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@types/js-yaml": "^4.0.9",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "@types/react-syntax-highlighter": "^15.5.13",
