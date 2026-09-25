@@ -108,14 +108,20 @@ interface GhRequestOptions {
   body?: unknown;
 }
 
-async function ghFetch<T>(path: string, token: string, options: GhRequestOptions = {}): Promise<T> {
+interface GhRequestOptions {
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  body?: unknown;
+  accept?: string; // 覆盖 Accept 头（如 raw 媒体类型直接取文件原文）
+}
+
+async function ghRequest(path: string, token: string, options: GhRequestOptions = {}): Promise<Response> {
   let response: Response;
   try {
     response = await fetch(`${API_ROOT}${path}`, {
       method: options.method || 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
-        Accept: 'application/vnd.github+json',
+        Accept: options.accept || 'application/vnd.github+json',
         'X-GitHub-Api-Version': '2022-11-28',
         ...(options.body !== undefined ? { 'Content-Type': 'application/json' } : {}),
       },
@@ -141,18 +147,18 @@ async function ghFetch<T>(path: string, token: string, options: GhRequestOptions
     throw new GitHubError(response.status, message);
   }
 
+  return response;
+}
+
+async function ghFetch<T>(path: string, token: string, options: GhRequestOptions = {}): Promise<T> {
+  const response = await ghRequest(path, token, options);
   return (await response.json()) as T;
 }
 
-// ============ Base64 编解码（支持中文等多字节字符） ============
-
-function decodeBase64(base64: string): string {
-  const binary = atob(base64.replace(/\n/g, ''));
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  return new TextDecoder().decode(bytes);
+/** 以 raw 媒体类型获取文件原文（Contents API 的目录列表不返回内容字段） */
+async function ghFetchRaw(path: string, token: string): Promise<string> {
+  const response = await ghRequest(path, token, { accept: 'application/vnd.github.raw' });
+  return response.text();
 }
 
 // ============ Frontmatter 解析与序列化 ============
@@ -236,8 +242,6 @@ export interface ContentInfo {
   sha: string;
   size: number;
   type: 'file' | 'dir';
-  content?: string;
-  encoding?: string;
 }
 
 /**
@@ -277,22 +281,26 @@ export interface AdminArticle {
 }
 
 /**
- * 拉取文章目录（一次请求带回所有文件内容），按日期倒序
+ * 拉取文章目录及各文件内容，按日期倒序。
+ * 注意：Contents API 的目录列表不返回文件内容，需按 raw 媒体类型逐个获取。
  */
 export async function listAdminArticles(token: string): Promise<AdminArticle[]> {
   const files = await ghFetch<ContentInfo[]>(
     `/repos/${OWNER}/${REPO}/contents/${ARTICLES_DIR}?ref=${BRANCH}`,
     token,
   );
-  const articles = files
-    .filter(file => file.type === 'file' && file.name.endsWith('.md'))
-    .map(file => {
-      const raw = file.content && file.encoding === 'base64' ? decodeBase64(file.content) : '';
+  const mdFiles = files.filter(file => file.type === 'file' && file.name.endsWith('.md'));
+  const articles = await Promise.all(
+    mdFiles.map(async file => {
+      const raw = await ghFetchRaw(
+        `/repos/${OWNER}/${REPO}/contents/${ARTICLES_DIR}/${encodeURIComponent(file.name)}?ref=${BRANCH}`,
+        token,
+      );
       const { frontmatter } = parseArticleFile(raw);
       return { filename: file.name, sha: file.sha, size: file.size, frontmatter, content: raw };
-    })
-    .sort((a, b) => (b.frontmatter.date || '').localeCompare(a.frontmatter.date || ''));
-  return articles;
+    }),
+  );
+  return articles.sort((a, b) => (b.frontmatter.date || '').localeCompare(a.frontmatter.date || ''));
 }
 
 /**
