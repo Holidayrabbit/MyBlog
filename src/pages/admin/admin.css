@@ -443,45 +443,18 @@
   min-height: 54px;
 }
 
-.admin-editor-body {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
+/* Vditor 即时渲染编辑器（Typora 式体验） */
+.admin-vditor {
+  min-height: 440px;
 }
 
-.admin-editor-body.admin-editor-split {
-  grid-template-columns: 1fr 1fr;
-}
-
-.admin-markdown-input {
-  width: 100%;
-  min-height: 56vh;
-  padding: 18px;
-  font-family: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--text-primary);
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+.admin-vditor .vditor {
   border-radius: 12px;
-  outline: none;
-  resize: vertical;
-  box-sizing: border-box;
-  transition: border-color 0.2s ease;
+  border-color: var(--border-color);
 }
 
-.admin-markdown-input:focus {
-  border-color: var(--accent-orange);
-}
-
-.admin-preview {
-  min-height: 56vh;
-  max-height: 80vh;
-  padding: 18px 22px;
-  overflow-y: auto;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
+.admin-vditor .vditor-ir {
+  font-size: 15px;
 }
 
 .admin-editor-footer {
@@ -508,18 +481,6 @@
   .admin-form-row,
   .admin-form-row:first-child {
     grid-template-columns: 1fr;
-  }
-
-  .admin-editor-body.admin-editor-split {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-preview {
-    min-height: 40vh;
-  }
-
-  .admin-markdown-input {
-    min-height: 44vh;
   }
 
   .admin-col-tags {

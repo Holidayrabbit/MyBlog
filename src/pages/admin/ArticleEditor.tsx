@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowLeft, Eye, Image as ImageIcon, Loader2, Save } from 'lucide-react';
-import Markdown from '../../components/Markdown';
+import { ArrowLeft, Loader2, Save } from 'lucide-react';
+import Vditor from 'vditor';
+import 'vditor/dist/index.css';
 import { GitHubError, imageAttachmentFor, parseArticleFile, saveArticleCommit } from '../../utils/githubApi';
 import type { AdminArticle, Frontmatter, ImageAttachment } from '../../utils/githubApi';
+import { useTheme } from '../../hooks/useTheme';
 
 interface ArticleEditorProps {
   token: string;
@@ -21,12 +23,8 @@ interface DraftState {
   savedAt: number;
 }
 
-/** 待提交图片：附上本地预览地址，保存成功或离开时释放 */
-interface PendingImage extends ImageAttachment {
-  previewUrl: string;
-}
-
 const DRAFT_KEY = 'myblog_admin_draft:current';
+const VDITOR_CDN = 'https://cdn.jsdelivr.net/npm/vditor@4.0.0';
 
 function todayString(): string {
   const d = new Date();
@@ -54,7 +52,10 @@ function suggestFilename(title: string): string {
 }
 
 const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, onCancel }) => {
-  const initial = useMemo(() => {
+  const { theme } = useTheme();
+
+  // 远端（或新建模板）的基准内容
+  const base = useMemo(() => {
     if (article) {
       const { frontmatter, content } = parseArticleFile(article.content);
       return {
@@ -66,8 +67,24 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, o
         content,
       };
     }
-    return { title: '', date: todayString(), tags: '', excerpt: '', filename: '', content: '' };
+    return { title: '', date: todayString(), tags: '', excerpt: '', filename: '', content: '# 新文章\n\n在这里开始写作...\n' };
   }, [article]);
+
+  // 初始值：存在未保存的本地草稿时优先使用
+  const initial = useMemo(() => {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (raw) {
+        const draft = JSON.parse(raw) as DraftState;
+        if (draft && typeof draft.content === 'string') {
+          return { ...draft, fromDraft: true };
+        }
+      }
+    } catch {
+      localStorage.removeItem(DRAFT_KEY);
+    }
+    return { ...base, fromDraft: false };
+  }, [base]);
 
   const [title, setTitle] = useState(initial.title);
   const [date, setDate] = useState(initial.date);
@@ -75,52 +92,20 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, o
   const [excerpt, setExcerpt] = useState(initial.excerpt);
   const [filename, setFilename] = useState(initial.filename);
   const [filenameEdited, setFilenameEdited] = useState(!!article); // 新建时标题自动带出文件名，手动改过就不再覆盖
-  const [content, setContent] = useState(
-    article ? initial.content : `# 新文章\n\n在这里开始写作...\n`,
-  );
-  const [draftRestored, setDraftRestored] = useState(false);
-  const [previewOpen, setPreviewOpen] = useState(false);
+  const [content, setContent] = useState(initial.content);
+  const [draftRestored, setDraftRestored] = useState(initial.fromDraft);
   const [saving, setSaving] = useState(false);
-  const [pendingImages, setPendingImages] = useState<PendingImage[]>([]);
+  const [pendingImages, setPendingImages] = useState<ImageAttachment[]>([]);
+  const [editorReady, setEditorReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const firstRenderRef = useRef(true);
-
-  // 恢复本地草稿（保存成功后草稿会被清除，所以存在草稿 = 上次未保存）
-  useEffect(() => {
-    const raw = localStorage.getItem(DRAFT_KEY);
-    if (!raw) return;
-    try {
-      const draft = JSON.parse(raw) as DraftState;
-      if (draft && typeof draft.content === 'string') {
-        setTitle(draft.title);
-        setDate(draft.date);
-        setTags(draft.tags);
-        setExcerpt(draft.excerpt);
-        setFilename(draft.filename);
-        setContent(draft.content);
-        setDraftRestored(true);
-      }
-    } catch {
-      localStorage.removeItem(DRAFT_KEY);
-    }
-  }, []);
-
-  // 输入防抖后自动保存草稿到 localStorage，误关页面/断网也不丢稿
-  useEffect(() => {
-    if (firstRenderRef.current) {
-      firstRenderRef.current = false;
-      return;
-    }
-    const timer = setTimeout(() => {
-      const draft: DraftState = { title, date, tags, excerpt, content, filename, savedAt: Date.now() };
-      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-    }, 600);
-    return () => clearTimeout(timer);
-  }, [title, date, tags, excerpt, content, filename]);
+  const vditorRef = useRef<Vditor | null>(null);
+  const vditorElRef = useRef<HTMLDivElement>(null);
+  const filenameRef = useRef(filename);
+  filenameRef.current = filename;
+  const themeRef = useRef(theme);
+  themeRef.current = theme;
 
   const parsedTags = useMemo(
     () =>
@@ -136,68 +121,92 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, o
   );
 
   const finalFilename = filename.endsWith('.md') ? filename : filename ? `${filename}.md` : '';
-  const articleId = filename.replace(/\.md$/, '');
 
-  const discardDraft = () => {
-    localStorage.removeItem(DRAFT_KEY);
-    setTitle(initial.title);
-    setDate(initial.date);
-    setTags(initial.tags);
-    setExcerpt(initial.excerpt);
-    setFilename(initial.filename);
-    setContent(article ? initial.content : `# 新文章\n\n在这里开始写作...\n`);
-    setDraftRestored(false);
-    setNotice(null);
-  };
+  // 创建 Vditor（IR 即时渲染，Typora 式体验：语法输入即原地渲染）
+  useEffect(() => {
+    if (!vditorElRef.current) return;
+    let shouldDestroy = false; // StrictMode 下清理可能早于异步初始化完成，需延迟销毁
+    const vditor = new Vditor(vditorElRef.current, {
+      mode: 'ir',
+      lang: 'zh_CN',
+      theme: themeRef.current === 'dark' ? 'dark' : 'classic',
+      value: initial.content,
+      placeholder: '用 Markdown 写作...',
+      height: 'auto',
+      minHeight: 440,
+      cache: { enable: false },
+      cdn: VDITOR_CDN,
+      counter: { enable: true, type: 'markdown' },
+      toolbar: [
+        'headings', 'bold', 'italic', 'strike', '|',
+        'list', 'ordered-list', 'check', 'outdent', 'indent', '|',
+        'quote', 'code', 'inline-code', 'table', 'link', '|',
+        'upload', '|', 'undo', 'redo', '|', 'fullscreen',
+      ],
+      upload: {
+        accept: 'image/*',
+        multiple: true,
+        handler: files => {
+          if (!filenameRef.current) {
+            setError('请先填写文件名，图片会按它归档到对应目录');
+            return '请先填写文件名，再上传图片';
+          }
+          const articleIdNow = filenameRef.current.replace(/\.md$/, '');
+          const md = files
+            .map(file => {
+              const attachment = imageAttachmentFor(articleIdNow, file);
+              setPendingImages(prev => [...prev, attachment]);
+              return `![${file.name.replace(/\.[^.]+$/, '')}](${attachment.url})`;
+            })
+            .join('\n');
+          vditorRef.current?.insertValue(md);
+          setNotice(
+            files.length === 1
+              ? '已插入图片引用，保存时与文章合并为一个 commit'
+              : `已插入 ${files.length} 张图片引用，保存时与文章合并为一个 commit`,
+          );
+          return null;
+        },
+      },
+      after: () => {
+        if (shouldDestroy) {
+          vditor.destroy();
+          return;
+        }
+        vditorRef.current = vditor;
+        setEditorReady(true);
+      },
+      input: value => setContent(value),
+    });
+    return () => {
+      if (vditorRef.current === vditor) {
+        vditorRef.current = null;
+        setEditorReady(false);
+        vditor.destroy();
+      } else {
+        shouldDestroy = true; // 异步初始化尚未完成，after 回调里再销毁
+      }
+    };
+  }, [initial]);
 
-  const insertIntoEditor = (text: string) => {
-    const textarea = textareaRef.current;
-    if (!textarea) {
-      setContent(c => c + text);
+  // 编辑器主题跟随站点明暗切换
+  useEffect(() => {
+    vditorRef.current?.setTheme(theme === 'dark' ? 'dark' : 'classic');
+  }, [theme]);
+
+  // 输入防抖后自动保存草稿到 localStorage，误关页面/断网也不丢稿
+  const firstRenderRef = useRef(true);
+  useEffect(() => {
+    if (firstRenderRef.current) {
+      firstRenderRef.current = false;
       return;
     }
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const next = content.slice(0, start) + text + content.slice(end);
-    setContent(next);
-    requestAnimationFrame(() => {
-      textarea.focus();
-      const pos = start + text.length;
-      textarea.setSelectionRange(pos, pos);
-    });
-  };
-
-  // 插入图片引用：图片暂存待传，保存时与文章合并为同一个 commit
-  const handleUploadImages = (files: FileList | null) => {
-    if (!files || files.length === 0) return;
-    if (!articleId) {
-      setError('请先填写文件名，图片会按它归档到对应目录');
-      return;
-    }
-    setError(null);
-    const added: PendingImage[] = Array.from(files).map(file => {
-      const attachment = imageAttachmentFor(articleId, file);
-      return { ...attachment, previewUrl: URL.createObjectURL(file) };
-    });
-    setPendingImages(prev => [...prev, ...added]);
-    added.forEach(img => insertIntoEditor(`![${img.file.name.replace(/\.[^.]+$/, '')}](${img.url})\n`));
-    setNotice(
-      added.length === 1
-        ? '已插入图片引用，点击"保存并发布"时与文章合并为一个 commit'
-        : `已插入 ${added.length} 张图片引用，保存时与文章合并为一个 commit`,
-    );
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  };
-
-  // 组件卸载时释放本地预览用 objectURL
-  const pendingImagesRef = useRef<PendingImage[]>(pendingImages);
-  pendingImagesRef.current = pendingImages;
-  useEffect(
-    () => () => {
-      pendingImagesRef.current.forEach(img => URL.revokeObjectURL(img.previewUrl));
-    },
-    [],
-  );
+    const timer = setTimeout(() => {
+      const draft: DraftState = { title, date, tags, excerpt, content, filename, savedAt: Date.now() };
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [title, date, tags, excerpt, content, filename]);
 
   // 有未保存的图片时拦截页面刷新/关闭，防止图片引用变成死链
   useEffect(() => {
@@ -208,6 +217,20 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, o
     window.addEventListener('beforeunload', handler);
     return () => window.removeEventListener('beforeunload', handler);
   }, [pendingImages.length]);
+
+  const discardDraft = () => {
+    localStorage.removeItem(DRAFT_KEY);
+    setTitle(base.title);
+    setDate(base.date);
+    setTags(base.tags);
+    setExcerpt(base.excerpt);
+    setFilename(base.filename);
+    setFilenameEdited(!!article);
+    setContent(base.content);
+    vditorRef.current?.setValue(base.content);
+    setDraftRestored(false);
+    setNotice(null);
+  };
 
   const handleCancel = () => {
     if (
@@ -220,6 +243,11 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, o
   };
 
   const handleSave = async () => {
+    if (!vditorRef.current || !editorReady) {
+      setError('编辑器尚未就绪，请稍候再试');
+      return;
+    }
+    const content = vditorRef.current.getValue();
     if (!title.trim()) {
       setError('请填写标题');
       return;
@@ -249,22 +277,11 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, o
       localStorage.removeItem(DRAFT_KEY);
       onDone();
     } catch (err) {
-      if (err instanceof GitHubError && err.status === 409) {
-        setError('远端文章已被修改（可能是上次保存还没同步），请返回列表刷新后重试，本地草稿已自动保留');
-      } else {
-        setError(err instanceof GitHubError ? err.message : '保存失败，请稍后重试');
-      }
+      setError(err instanceof GitHubError ? err.message : '保存失败，请稍后重试');
     } finally {
       setSaving(false);
     }
   };
-
-  // 预览时把待上传图片映射到本地 objectURL，直接看到图片效果
-  const previewImageMap = useMemo(() => {
-    const map = new Map<string, string>();
-    pendingImages.forEach(img => map.set(img.url, img.previewUrl));
-    return map;
-  }, [pendingImages]);
 
   return (
     <div className="admin-editor">
@@ -277,31 +294,10 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, o
           <h1 className="admin-title">{article ? '编辑文章' : '新建文章'}</h1>
         </div>
         <div className="admin-toolbar-right">
-          <button className="admin-btn" onClick={() => setPreviewOpen(v => !v)}>
-            <Eye size={15} />
-            {previewOpen ? '关闭预览' : '实时预览'}
-          </button>
-          <button
-            className="admin-btn"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={!articleId}
-            title="插入图片引用，随文章保存在同一个 commit 中"
-          >
-            <ImageIcon size={15} />
-            上传图片{pendingImages.length > 0 ? `（${pendingImages.length}）` : ''}
-          </button>
           <button className="admin-btn admin-btn-primary" onClick={handleSave} disabled={saving}>
             {saving ? <Loader2 size={15} className="admin-spin" /> : <Save size={15} />}
             {saving ? '正在保存...' : '保存并发布'}
           </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            multiple
-            hidden
-            onChange={e => handleUploadImages(e.target.files)}
-          />
         </div>
       </div>
 
@@ -374,27 +370,12 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, o
         </label>
       </div>
 
-      <div className={`admin-editor-body ${previewOpen ? 'admin-editor-split' : ''}`}>
-        <textarea
-          ref={textareaRef}
-          className="admin-markdown-input"
-          value={content}
-          onChange={e => setContent(e.target.value)}
-          placeholder="用 Markdown 写作..."
-          spellCheck={false}
-        />
-        {previewOpen && (
-          <div className="admin-preview">
-            <Markdown content={content} resolveImageSrc={src => previewImageMap.get(src) ?? src} />
-          </div>
-        )}
-      </div>
+      <div ref={vditorElRef} className="admin-vditor" />
 
       <div className="admin-editor-footer">
         <span>
-          {content.length} 字符
-          {pendingImages.length > 0 && ` · ${pendingImages.length} 张图片将随保存一起提交`}
-          {' · 保存 = 提交 commit 到 main 分支，自动触发部署'}
+          {pendingImages.length > 0 && `${pendingImages.length} 张图片将随保存一起提交 · `}
+          保存 = 提交 commit 到 main 分支，自动触发部署
         </span>
         <span className="admin-muted">
           {article ? `文件：public/articles/${finalFilename || article.filename}` : `文件：public/articles/${finalFilename || '（待填写）'}`}

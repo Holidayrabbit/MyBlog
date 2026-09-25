@@ -7,14 +7,12 @@ import CodeBlock from './CodeBlock';
 
 interface MarkdownProps {
   content: string;
-  /** 可选：解析图片 src（管理后台预览用本地 objectURL 显示待上传图片），站点渲染不传 */
-  resolveImageSrc?: (src: string) => string;
 }
 
 /**
  * 站点统一的 Markdown 渲染组件（文章详情页、管理后台预览共用）
  */
-const Markdown: React.FC<MarkdownProps> = ({ content, resolveImageSrc }) => {
+const Markdown: React.FC<MarkdownProps> = ({ content }) => {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm, remarkMath]}
@@ -36,14 +34,7 @@ const Markdown: React.FC<MarkdownProps> = ({ content, resolveImageSrc }) => {
         ol: ({ children }) => <ol className="md-ol">{children}</ol>,
         li: ({ children }) => <li className="md-li">{children}</li>,
         blockquote: ({ children }) => <blockquote className="md-blockquote">{children}</blockquote>,
-        img: ({ src, alt }) => (
-          <img
-            src={src && resolveImageSrc ? resolveImageSrc(src) : src}
-            alt={alt}
-            className="md-img"
-            loading="lazy"
-          />
-        ),
+        img: ({ src, alt }) => <img src={src} alt={alt} className="md-img" loading="lazy" />,
         table: ({ children }) => <table className="md-table">{children}</table>,
         thead: ({ children }) => <thead className="md-thead">{children}</thead>,
         tbody: ({ children }) => <tbody className="md-tbody">{children}</tbody>,
