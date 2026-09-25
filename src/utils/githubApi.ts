@@ -108,7 +108,7 @@ export class GitHubError extends Error {
 }
 
 interface GhRequestOptions {
-  method?: 'GET' | 'PUT' | 'DELETE';
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   body?: unknown;
 }
 
@@ -149,15 +149,6 @@ async function ghFetch<T>(path: string, token: string, options: GhRequestOptions
 }
 
 // ============ Base64 编解码（支持中文等多字节字符） ============
-
-function encodeBase64(text: string): string {
-  const bytes = new TextEncoder().encode(text);
-  let binary = '';
-  bytes.forEach(byte => {
-    binary += String.fromCharCode(byte);
-  });
-  return btoa(binary);
-}
 
 function decodeBase64(base64: string): string {
   const binary = atob(base64.replace(/\n/g, ''));
@@ -308,37 +299,116 @@ export async function listAdminArticles(token: string): Promise<AdminArticle[]> 
   return articles;
 }
 
-export interface SaveResult {
-  commit: { sha: string; html_url: string };
+/**
+ * 随保存一起提交的图片：path 为仓库内路径，url 为站点上的最终访问地址
+ */
+export interface ImageAttachment {
+  path: string;
+  url: string;
+  file: File;
+}
+
+/**
+ * 计算图片在仓库中的路径与站点 URL（文件名中的非法字符替换为下划线）
+ */
+export function imageAttachmentFor(articleId: string, file: File): ImageAttachment {
+  const safeName = file.name.replace(/[^\w.\-\u4e00-\u9fa5]/g, '_');
+  return {
+    path: `${IMAGES_DIR}/${articleId}/${safeName}`,
+    url: `${IMAGE_BASE}/${articleId}/${safeName}`,
+    file,
+  };
+}
+
+async function fileToBase64(file: File): Promise<string> {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  let binary = '';
+  bytes.forEach(byte => {
+    binary += String.fromCharCode(byte);
+  });
+  return btoa(binary);
 }
 
 export interface SaveArticleParams {
   filename: string;
   frontmatter: Frontmatter;
   content: string;
-  sha?: string; // 更新已有文章时必传；新建时不传
+  isNew: boolean;
+  images?: ImageAttachment[]; // 随本次保存一起提交的图片
 }
 
 /**
- * 新建或更新文章（每次保存 = 一个 commit，推送后自动触发部署）
+ * 保存文章（可附带图片）为**同一个 commit**。
+ *
+ * Contents API 每次只能提交一个文件，因此这里走 Git Data API：
+ * 建 blob → 基于当前 main 的 tree 建 tree → 建 commit → 推进 main 引用。
+ * 好处：文章与 N 张图片一次提交只触发一次部署；且天然无 sha 冲突。
  */
-export async function saveAdminArticle(token: string, params: SaveArticleParams): Promise<SaveResult> {
-  const fileContent = buildArticleFile(params.frontmatter, params.content);
-  const message = params.sha
-    ? `docs: 更新文章《${params.frontmatter.title}》`
-    : `feat: 添加文章《${params.frontmatter.title}》`;
-  const body: Record<string, unknown> = {
-    message,
-    content: encodeBase64(fileContent),
-    branch: BRANCH,
-  };
-  if (params.sha) body.sha = params.sha;
+export async function saveArticleCommit(
+  token: string,
+  params: SaveArticleParams,
+): Promise<{ sha: string; html_url: string }> {
+  const imageCount = params.images?.length ?? 0;
+  const suffix = imageCount > 0 ? `（含 ${imageCount} 张图片）` : '';
+  const message = params.isNew
+    ? `feat: 添加文章《${params.frontmatter.title}》${suffix}`
+    : `docs: 更新文章《${params.frontmatter.title}》${suffix}`;
 
-  return ghFetch<SaveResult>(
-    `/repos/${OWNER}/${REPO}/contents/${ARTICLES_DIR}/${encodeURIComponent(params.filename)}`,
-    token,
-    { method: 'PUT', body },
-  );
+  const getHead = () =>
+    ghFetch<{ object: { sha: string } }>(`/repos/${OWNER}/${REPO}/git/ref/heads/${BRANCH}`, token);
+
+  let head = await getHead();
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const headCommit = await ghFetch<{ tree: { sha: string } }>(
+      `/repos/${OWNER}/${REPO}/git/commits/${head.object.sha}`,
+      token,
+    );
+
+    const entries: Array<{ path: string; mode: string; type: string; sha: string }> = [];
+
+    const mdBlob = await ghFetch<{ sha: string }>(`/repos/${OWNER}/${REPO}/git/blobs`, token, {
+      method: 'POST',
+      body: { content: buildArticleFile(params.frontmatter, params.content), encoding: 'utf-8' },
+    });
+    entries.push({
+      path: `${ARTICLES_DIR}/${params.filename}`,
+      mode: '100644',
+      type: 'blob',
+      sha: mdBlob.sha,
+    });
+
+    for (const image of params.images ?? []) {
+      const imgBlob = await ghFetch<{ sha: string }>(`/repos/${OWNER}/${REPO}/git/blobs`, token, {
+        method: 'POST',
+        body: { content: await fileToBase64(image.file), encoding: 'base64' },
+      });
+      entries.push({ path: image.path, mode: '100644', type: 'blob', sha: imgBlob.sha });
+    }
+
+    const tree = await ghFetch<{ sha: string }>(`/repos/${OWNER}/${REPO}/git/trees`, token, {
+      method: 'POST',
+      body: { base_tree: headCommit.tree.sha, tree: entries },
+    });
+    const commit = await ghFetch<{ sha: string; html_url: string }>(
+      `/repos/${OWNER}/${REPO}/git/commits`,
+      token,
+      { method: 'POST', body: { message, tree: tree.sha, parents: [head.object.sha] } },
+    );
+
+    try {
+      await ghFetch(`/repos/${OWNER}/${REPO}/git/refs/heads/${BRANCH}`, token, {
+        method: 'PATCH',
+        body: { sha: commit.sha, force: false },
+      });
+      return commit;
+    } catch (err) {
+      // main 引用在保存期间被并发推进（罕见）：基于最新 head 重建后重试
+      const retryable = err instanceof GitHubError && (err.status === 409 || err.status === 422);
+      if (!retryable || attempt === 2) throw err;
+      head = await getHead();
+    }
+  }
+  throw new Error('保存失败：重试次数已用完');
 }
 
 /**
@@ -362,52 +432,6 @@ export async function deleteAdminArticle(
       },
     },
   );
-}
-
-/**
- * 上传图片到文章对应的图片目录 public/images/<articleId>/，
- * 返回可直接在 markdown 中使用的 URL。同名文件会被覆盖。
- */
-export async function uploadAdminImage(
-  token: string,
-  articleId: string,
-  file: File,
-): Promise<string> {
-  const safeName = file.name.replace(/[^\w.\-\u4e00-\u9fa5]/g, '_');
-  const filePath = `${IMAGES_DIR}/${encodeURIComponent(articleId)}/${encodeURIComponent(safeName)}`;
-  const buffer = await file.arrayBuffer();
-  const bytes = new Uint8Array(buffer);
-  let binary = '';
-  bytes.forEach(byte => {
-    binary += String.fromCharCode(byte);
-  });
-
-  const put = (sha?: string) =>
-    ghFetch<SaveResult>(`/repos/${OWNER}/${REPO}/contents/${filePath}`, token, {
-      method: 'PUT',
-      body: {
-        message: `chore: 上传图片 ${articleId}/${safeName}`,
-        content: btoa(binary),
-        branch: BRANCH,
-        ...(sha ? { sha } : {}),
-      },
-    });
-
-  try {
-    await put();
-  } catch (err) {
-    // 422 = 已存在同名文件但没有提供 sha，取 sha 后覆盖
-    if (err instanceof GitHubError && err.status === 422) {
-      const existing = await ghFetch<ContentInfo>(
-        `/repos/${OWNER}/${REPO}/contents/${filePath}?ref=${BRANCH}`,
-        token,
-      );
-      await put(existing.sha);
-    } else {
-      throw err;
-    }
-  }
-  return `${IMAGE_BASE}/${articleId}/${safeName}`;
 }
 
 export interface DeployRun {

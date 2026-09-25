@@ -1,13 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, Eye, Image as ImageIcon, Loader2, Save } from 'lucide-react';
 import Markdown from '../../components/Markdown';
-import {
-  GitHubError,
-  parseArticleFile,
-  saveAdminArticle,
-  uploadAdminImage,
-} from '../../utils/githubApi';
-import type { AdminArticle, Frontmatter } from '../../utils/githubApi';
+import { GitHubError, imageAttachmentFor, parseArticleFile, saveArticleCommit } from '../../utils/githubApi';
+import type { AdminArticle, Frontmatter, ImageAttachment } from '../../utils/githubApi';
 
 interface ArticleEditorProps {
   token: string;
@@ -24,6 +19,11 @@ interface DraftState {
   content: string;
   filename: string;
   savedAt: number;
+}
+
+/** 待提交图片：附上本地预览地址，保存成功或离开时释放 */
+interface PendingImage extends ImageAttachment {
+  previewUrl: string;
 }
 
 const DRAFT_KEY = 'myblog_admin_draft:current';
@@ -81,7 +81,7 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, o
   const [draftRestored, setDraftRestored] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
+  const [pendingImages, setPendingImages] = useState<PendingImage[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -167,26 +167,56 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, o
     });
   };
 
-  const handleUploadImages = async (files: FileList | null) => {
+  // 插入图片引用：图片暂存待传，保存时与文章合并为同一个 commit
+  const handleUploadImages = (files: FileList | null) => {
     if (!files || files.length === 0) return;
     if (!articleId) {
       setError('请先填写文件名，图片会按它归档到对应目录');
       return;
     }
     setError(null);
-    setUploading(true);
-    try {
-      for (const file of Array.from(files)) {
-        const url = await uploadAdminImage(token, articleId, file);
-        insertIntoEditor(`![${file.name.replace(/\.[^.]+$/, '')}](${url})\n`);
-      }
-      setNotice('图片已上传并插入到光标处（上传即创建 commit，无需手动管理）');
-    } catch (err) {
-      setError(err instanceof GitHubError ? err.message : '图片上传失败');
-    } finally {
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
+    const added: PendingImage[] = Array.from(files).map(file => {
+      const attachment = imageAttachmentFor(articleId, file);
+      return { ...attachment, previewUrl: URL.createObjectURL(file) };
+    });
+    setPendingImages(prev => [...prev, ...added]);
+    added.forEach(img => insertIntoEditor(`![${img.file.name.replace(/\.[^.]+$/, '')}](${img.url})\n`));
+    setNotice(
+      added.length === 1
+        ? '已插入图片引用，点击"保存并发布"时与文章合并为一个 commit'
+        : `已插入 ${added.length} 张图片引用，保存时与文章合并为一个 commit`,
+    );
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  // 组件卸载时释放本地预览用 objectURL
+  const pendingImagesRef = useRef<PendingImage[]>(pendingImages);
+  pendingImagesRef.current = pendingImages;
+  useEffect(
+    () => () => {
+      pendingImagesRef.current.forEach(img => URL.revokeObjectURL(img.previewUrl));
+    },
+    [],
+  );
+
+  // 有未保存的图片时拦截页面刷新/关闭，防止图片引用变成死链
+  useEffect(() => {
+    if (pendingImages.length === 0) return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+    };
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [pendingImages.length]);
+
+  const handleCancel = () => {
+    if (
+      pendingImages.length > 0 &&
+      !window.confirm(`有 ${pendingImages.length} 张图片尚未随文章保存，返回将丢失。确定返回吗？`)
+    ) {
+      return;
     }
+    onCancel();
   };
 
   const handleSave = async () => {
@@ -207,18 +237,19 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, o
     setSaving(true);
     try {
       const frontmatter: Frontmatter = { title: title.trim(), date, tags: parsedTags, excerpt: excerpt.trim() };
-      await saveAdminArticle(token, {
+      // 只提交正文中实际引用了的图片，未引用的不上传
+      const usedImages = pendingImages.filter(img => content.includes(img.url));
+      await saveArticleCommit(token, {
         filename: finalFilename,
         frontmatter,
         content,
-        sha: article?.sha,
+        isNew: !article,
+        images: usedImages,
       });
       localStorage.removeItem(DRAFT_KEY);
       onDone();
     } catch (err) {
-      if (err instanceof GitHubError && err.status === 422) {
-        setError('仓库中已存在同名文件，请换一个文件名');
-      } else if (err instanceof GitHubError && err.status === 409) {
+      if (err instanceof GitHubError && err.status === 409) {
         setError('远端文章已被修改（可能是上次保存还没同步），请返回列表刷新后重试，本地草稿已自动保留');
       } else {
         setError(err instanceof GitHubError ? err.message : '保存失败，请稍后重试');
@@ -228,11 +259,18 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, o
     }
   };
 
+  // 预览时把待上传图片映射到本地 objectURL，直接看到图片效果
+  const previewImageMap = useMemo(() => {
+    const map = new Map<string, string>();
+    pendingImages.forEach(img => map.set(img.url, img.previewUrl));
+    return map;
+  }, [pendingImages]);
+
   return (
     <div className="admin-editor">
       <div className="admin-toolbar">
         <div className="admin-toolbar-left">
-          <button className="admin-btn" onClick={onCancel}>
+          <button className="admin-btn" onClick={handleCancel}>
             <ArrowLeft size={15} />
             返回列表
           </button>
@@ -246,11 +284,11 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, o
           <button
             className="admin-btn"
             onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
-            title="上传到 public/images/<文章>/ 并插入 markdown"
+            disabled={!articleId}
+            title="插入图片引用，随文章保存在同一个 commit 中"
           >
-            {uploading ? <Loader2 size={15} className="admin-spin" /> : <ImageIcon size={15} />}
-            上传图片
+            <ImageIcon size={15} />
+            上传图片{pendingImages.length > 0 ? `（${pendingImages.length}）` : ''}
           </button>
           <button className="admin-btn admin-btn-primary" onClick={handleSave} disabled={saving}>
             {saving ? <Loader2 size={15} className="admin-spin" /> : <Save size={15} />}
@@ -347,14 +385,16 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ token, article, onDone, o
         />
         {previewOpen && (
           <div className="admin-preview">
-            <Markdown content={content} />
+            <Markdown content={content} resolveImageSrc={src => previewImageMap.get(src) ?? src} />
           </div>
         )}
       </div>
 
       <div className="admin-editor-footer">
         <span>
-          {content.length} 字符 · 保存 = 提交 commit 到 main 分支，自动触发部署
+          {content.length} 字符
+          {pendingImages.length > 0 && ` · ${pendingImages.length} 张图片将随保存一起提交`}
+          {' · 保存 = 提交 commit 到 main 分支，自动触发部署'}
         </span>
         <span className="admin-muted">
           {article ? `文件：public/articles/${finalFilename || article.filename}` : `文件：public/articles/${finalFilename || '（待填写）'}`}
