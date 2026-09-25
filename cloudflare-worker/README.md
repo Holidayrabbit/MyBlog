@@ -62,6 +62,10 @@ Worker 全程只做三件事：跳转 GitHub 授权页、用 secret 换 token、
 - **提示 redirect_uri mismatch**：OAuth App 的 callback URL 与实际 Worker 地址不一致，
   检查是否漏了 `/callback`、多了斜杠、或用了旧地址
 - **点了按钮没反应**：说明前端还没配置 `OAUTH_WORKER_URL`（第 4 步）
+- **登录后博客登录页显示"Worker 内部错误：xxx"**：这就是真实的失败原因（已替代 Cloudflare 1101 白屏），
+  常见为 GitHub 接口瞬时失败，直接重试即可；若反复出现请把错误信息记录下来
+- **查看 Worker 日志**：Dashboard → Worker → Logs → Begin log stream，然后重试登录，
+  异常堆栈会实时打印（代码中所有关键失败都有 console.error）
 - **本地开发**：回调地址固定是线上 Worker，本地 `npm run dev` 时请继续用 Token 方式登录
 - **想撤销授权**：GitHub → Settings → Applications → Authorized OAuth Apps → Revoke；
   Cloudflare Worker 可随时暂停或删除，后台会退回 Token 登录方式
