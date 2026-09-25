@@ -89,19 +89,6 @@ export async function fetchLatestArticles(limit: number = 2): Promise<Article[]>
 }
 
 /**
- * 根据标签过滤文章
- */
-export async function fetchArticlesByTag(tag: string): Promise<Article[]> {
-  try {
-    const articles = await fetchArticles();
-    return articles.filter(article => article.tags.includes(tag));
-  } catch (error) {
-    console.error('Failed to fetch articles by tag:', error);
-    return [];
-  }
-}
-
-/**
  * 获取所有标签
  */
 export async function fetchAllTags(): Promise<string[]> {
@@ -111,25 +98,6 @@ export async function fetchAllTags(): Promise<string[]> {
     return Array.from(new Set(allTags)).sort();
   } catch (error) {
     console.error('Failed to fetch tags:', error);
-    return [];
-  }
-}
-
-/**
- * 搜索文章
- */
-export async function searchArticles(query: string): Promise<Article[]> {
-  try {
-    const articles = await fetchArticles();
-    const lowercaseQuery = query.toLowerCase();
-    
-    return articles.filter(article =>
-      article.title.toLowerCase().includes(lowercaseQuery) ||
-      article.excerpt.toLowerCase().includes(lowercaseQuery) ||
-      article.tags.some(tag => tag.toLowerCase().includes(lowercaseQuery))
-    );
-  } catch (error) {
-    console.error('Failed to search articles:', error);
     return [];
   }
 }
