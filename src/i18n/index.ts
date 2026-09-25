@@ -16,6 +16,7 @@ const resources = {
       back: 'Back',
       language: 'Language',
       theme: 'Theme',
+      admin: 'Article Admin',
       
       // Home page
       welcome: 'Welcome to My Personal Website',
@@ -83,6 +84,7 @@ const resources = {
       back: '返回',
       language: '语言',
       theme: '主题',
+      admin: '文章管理',
       
       // Home page
       welcome: '欢迎来到我的个人网站',

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
-import { Sun, Moon, Globe } from 'lucide-react';
+import { Sun, Moon, Globe, LogIn } from 'lucide-react';
 
 const Header: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -44,20 +44,23 @@ const Header: React.FC = () => {
           </nav>
           
           <div className="controls">
-            <button 
+            <button
               onClick={toggleLanguage}
               className="control-btn"
               title={t('language')}
             >
               <Globe size={18} />
             </button>
-            <button 
+            <button
               onClick={toggleTheme}
               className="control-btn"
               title={t('theme')}
             >
               {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             </button>
+            <Link to="/admin" className="control-btn" title={t('admin')}>
+              <LogIn size={18} />
+            </Link>
           </div>
         </div>
       </div>
