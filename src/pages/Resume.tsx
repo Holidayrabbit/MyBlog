@@ -61,7 +61,9 @@ const Resume: React.FC = () => {
     <div className="container">
       <div className="profile-layout">
         <aside className="profile-sidebar">
-          <div className="profile-avatar">{profile.avatarText}</div>
+          <div className="profile-avatar">
+            <img src={`${import.meta.env.BASE_URL}${profile.avatar}`} alt={T(profile.name)} />
+          </div>
           <div>
             <h1 className="profile-name">{T(profile.name)}</h1>
             <p className="profile-role">{T(profile.role)}</p>

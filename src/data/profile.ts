@@ -39,7 +39,8 @@ export interface Award {
 
 export const profile = {
   name: { zh: '赵甫霖', en: 'Fulin Zhao' } as LocalText,
-  avatarText: '赵',
+  /** 头像图片，放在 public/ 下（对应 public/fulin-avatar.jpg，512px 压缩版，肉眼无损） */
+  avatar: 'fulin-avatar.jpg',
   role: {
     zh: '算法与 LLM Agent 开发方向 · HUST 硕士在读',
     en: 'ML & LLM Agent development · M.S. student at HUST',
