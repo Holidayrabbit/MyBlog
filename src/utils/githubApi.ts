@@ -415,34 +415,55 @@ export async function saveArticleCommit(
   throw new Error('保存失败：重试次数已用完');
 }
 
-/**
- * 删除文章，并将其图片目录 public/images/<articleId>/ 下的图片一并删除（同一个 commit）。
- * Git Trees API 中把条目的 sha 置为 null 即表示删除该路径（需确保文件当前存在）。
- */
-export async function deleteAdminArticle(
-  token: string,
-  filename: string,
-  title?: string,
-): Promise<void> {
-  const articleId = filename.replace(/\.md$/, '');
+export interface DeleteArticleItem {
+  filename: string;
+  title?: string;
+}
 
-  // 列出图片目录下的文件（目录不存在 = 无图片，404 视为正常）
-  let imagePaths: string[] = [];
-  try {
-    const imageFiles = await ghFetch<ContentInfo[]>(
-      `/repos/${OWNER}/${REPO}/contents/${IMAGES_DIR}/${encodeURIComponent(articleId)}?ref=${BRANCH}`,
-      token,
-    );
-    imagePaths = imageFiles.filter(f => f.type === 'file').map(f => f.path);
-  } catch (err) {
-    if (!(err instanceof GitHubError && err.status === 404)) throw err;
+/**
+ * 删除一或多篇文章，并把各自图片目录 public/images/<articleId>/ 下的图片一并删除，
+ * 全部放进**同一个 commit**（只触发一次部署）。
+ *
+ * Git Trees API 中把条目的 sha 置为 null 即表示删除该路径（需确保文件当前存在）。
+ * 注意：即使走删除，mode/type 也必须照常提供，缺失会被 GitHub 以 422 拒绝。
+ */
+export async function deleteAdminArticles(
+  token: string,
+  items: DeleteArticleItem[],
+): Promise<void> {
+  if (items.length === 0) return;
+
+  // 收集全部待删除路径：各文章的 md + 其图片目录下的文件
+  const paths: string[] = [];
+  for (const item of items) {
+    paths.push(`${ARTICLES_DIR}/${item.filename}`);
+    const articleId = item.filename.replace(/\.md$/, '');
+    // 列出图片目录下的文件（目录不存在 = 无图片，404 视为正常）
+    try {
+      const imageFiles = await ghFetch<ContentInfo[]>(
+        `/repos/${OWNER}/${REPO}/contents/${IMAGES_DIR}/${encodeURIComponent(articleId)}?ref=${BRANCH}`,
+        token,
+      );
+      paths.push(...imageFiles.filter(f => f.type === 'file').map(f => f.path));
+    } catch (err) {
+      if (!(err instanceof GitHubError && err.status === 404)) throw err;
+    }
   }
 
-  const titleText = title || filename;
-  const message =
-    imagePaths.length > 0
-      ? `chore: 删除文章《${titleText}》及 ${imagePaths.length} 张图片`
-      : `chore: 删除文章《${titleText}》`;
+  const imageCount = paths.length - items.length;
+  let message: string;
+  if (items.length === 1) {
+    const titleText = items[0].title || items[0].filename;
+    message =
+      imageCount > 0
+        ? `chore: 删除文章《${titleText}》及 ${imageCount} 张图片`
+        : `chore: 删除文章《${titleText}》`;
+  } else {
+    message =
+      imageCount > 0
+        ? `chore: 批量删除 ${items.length} 篇文章及 ${imageCount} 张图片`
+        : `chore: 批量删除 ${items.length} 篇文章`;
+  }
 
   const getHead = () =>
     ghFetch<{ object: { sha: string } }>(`/repos/${OWNER}/${REPO}/git/ref/heads/${BRANCH}`, token);
@@ -457,10 +478,7 @@ export async function deleteAdminArticle(
       method: 'POST',
       body: {
         base_tree: headCommit.tree.sha,
-        tree: [
-          { path: `${ARTICLES_DIR}/${filename}`, sha: null },
-          ...imagePaths.map(path => ({ path, sha: null })),
-        ],
+        tree: paths.map(path => ({ path, mode: '100644', type: 'blob', sha: null })),
       },
     });
     const commit = await ghFetch<{ sha: string; html_url: string }>(

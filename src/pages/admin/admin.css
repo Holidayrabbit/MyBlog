@@ -376,6 +376,45 @@
   white-space: nowrap;
 }
 
+.admin-col-check {
+  width: 44px;
+}
+
+.admin-check {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-orange);
+  cursor: pointer;
+}
+
+.admin-check:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.admin-batch-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--accent-orange);
+  border-radius: 8px;
+}
+
+.admin-batch-count {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.admin-batch-actions {
+  display: flex;
+  gap: 8px;
+}
+
 .admin-col-tags {
   width: 220px;
 }
@@ -487,8 +526,8 @@
     display: none;
   }
 
-  .admin-table th:nth-child(3),
-  .admin-table td:nth-child(3) {
+  .admin-table th:nth-child(4),
+  .admin-table td:nth-child(4) {
     display: none;
   }
 }

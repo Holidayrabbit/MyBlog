@@ -10,7 +10,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import {
-  deleteAdminArticle,
+  deleteAdminArticles,
   getLatestDeploy,
   listAdminArticles,
 } from '../../utils/githubApi';
@@ -64,6 +64,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, user, onEdit, on
   const [deleting, setDeleting] = useState<string | null>(null);
   const [deploy, setDeploy] = useState<DeployRun | null>(null);
   const [deploying, setDeploying] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [batchDeleting, setBatchDeleting] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -71,6 +73,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, user, onEdit, on
     try {
       const list = await listAdminArticles(token);
       setArticles(list);
+      // 列表刷新后丢掉已不存在的选中项（删除/重命名后保持选择集干净）
+      const names = new Set(list.map(article => article.filename));
+      setSelected(prev => new Set([...prev].filter(filename => names.has(filename))));
     } catch (err) {
       setError(err instanceof GitHubError ? err.message : '加载文章列表失败');
     } finally {
@@ -107,7 +112,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, user, onEdit, on
     }
     setDeleting(article.filename);
     try {
-      await deleteAdminArticle(token, article.filename, title);
+      await deleteAdminArticles(token, [{ filename: article.filename, title }]);
       await load();
     } catch (err) {
       setError(err instanceof GitHubError ? err.message : '删除失败');
@@ -115,6 +120,47 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, user, onEdit, on
       setDeleting(null);
     }
   };
+
+  const handleBatchDelete = async () => {
+    const targets = articles.filter(article => selected.has(article.filename));
+    if (targets.length === 0 || batchDeleting) return;
+    const names = targets.map(article => article.frontmatter.title || article.filename);
+    const preview =
+      names.length <= 8 ? names.join('、') : `${names.slice(0, 8).join('、')} 等 ${names.length} 篇`;
+    if (!window.confirm(`确定删除选中的 ${targets.length} 篇文章吗？\n\n${preview}\n\n文章及其图片目录会被一起删除（一个 commit）并触发重新部署，可用 git 历史恢复。`)) {
+      return;
+    }
+    setBatchDeleting(true);
+    try {
+      await deleteAdminArticles(
+        token,
+        targets.map(article => ({
+          filename: article.filename,
+          title: article.frontmatter.title || article.filename,
+        })),
+      );
+      setSelected(new Set());
+      await load();
+    } catch (err) {
+      setError(err instanceof GitHubError ? err.message : '批量删除失败');
+    } finally {
+      setBatchDeleting(false);
+    }
+  };
+
+  const toggleSelected = (filename: string) => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      if (next.has(filename)) {
+        next.delete(filename);
+      } else {
+        next.add(filename);
+      }
+      return next;
+    });
+  };
+
+  const allSelected = articles.length > 0 && selected.size === articles.length;
 
   const handlePreview = (article: AdminArticle) => {
     const id = article.filename.replace(/\.md$/, '');
@@ -157,6 +203,21 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, user, onEdit, on
         </div>
       )}
 
+      {selected.size > 0 && (
+        <div className="admin-batch-bar">
+          <span className="admin-batch-count">已选 {selected.size} 篇</span>
+          <div className="admin-batch-actions">
+            <button className="admin-btn" onClick={() => setSelected(new Set())} disabled={batchDeleting}>
+              取消选择
+            </button>
+            <button className="admin-btn admin-btn-danger" onClick={handleBatchDelete} disabled={batchDeleting}>
+              {batchDeleting ? <Loader2 size={15} className="admin-spin" /> : <Trash2 size={15} />}
+              删除所选
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="admin-card">
         {loading ? (
           <div className="admin-loading">
@@ -172,6 +233,20 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, user, onEdit, on
           <table className="admin-table">
             <thead>
               <tr>
+                <th className="admin-col-check">
+                  <input
+                    type="checkbox"
+                    className="admin-check"
+                    checked={allSelected}
+                    ref={el => {
+                      if (el) el.indeterminate = selected.size > 0 && !allSelected;
+                    }}
+                    onChange={() =>
+                      setSelected(allSelected ? new Set() : new Set(articles.map(article => article.filename)))
+                    }
+                    aria-label="全选文章"
+                  />
+                </th>
                 <th>标题</th>
                 <th className="admin-col-date">日期</th>
                 <th className="admin-col-tags">标签</th>
@@ -181,6 +256,16 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, user, onEdit, on
             <tbody>
               {articles.map(article => (
                 <tr key={article.filename}>
+                  <td className="admin-col-check">
+                    <input
+                      type="checkbox"
+                      className="admin-check"
+                      checked={selected.has(article.filename)}
+                      onChange={() => toggleSelected(article.filename)}
+                      disabled={batchDeleting}
+                      aria-label={`选择 ${article.frontmatter.title || article.filename}`}
+                    />
+                  </td>
                   <td>
                     <button className="admin-article-link" onClick={() => onEdit(article)} title={article.filename}>
                       <span className="admin-article-title">{article.frontmatter.title || article.filename}</span>
@@ -212,7 +297,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, user, onEdit, on
                       <button
                         className="admin-btn admin-btn-icon admin-btn-danger"
                         onClick={() => handleDelete(article)}
-                        disabled={deleting === article.filename}
+                        disabled={deleting === article.filename || batchDeleting}
                         title="删除"
                       >
                         {deleting === article.filename ? <Loader2 size={15} className="admin-spin" /> : <Trash2 size={15} />}
