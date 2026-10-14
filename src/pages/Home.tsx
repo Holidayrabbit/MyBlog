@@ -2,9 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLatestArticles } from '../hooks/useArticles';
+import { navigationGroups, type Language } from '../data/navigation';
 
 const Home: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang: Language = i18n.language.startsWith('zh') ? 'zh' : 'en';
   const { articles, loading, error } = useLatestArticles(2);
 
   return (
@@ -40,31 +42,28 @@ const Home: React.FC = () => {
 
       <section className="site-navigation">
         <h2 className="section-title">{t('siteNavigation')}</h2>
-        <div className="nav-grid">
-          <Link to="/articles" className="nav-card">
-            <h3 className="nav-card-title">{t('technicalArticles')}</h3>
-            <p className="nav-card-desc">{t('technicalArticlesDesc')}</p>
-            <span className="nav-card-link">{t('readMore')} →</span>
-          </Link>
-          
-          <Link to="/academic" className="nav-card">
-            <h3 className="nav-card-title">{t('academicResearch')}</h3>
-            <p className="nav-card-desc">{t('academicResearchDesc')}</p>
-            <span className="nav-card-link">{t('readMore')} →</span>
-          </Link>
-          
-          <Link to="/projects" className="nav-card">
-            <h3 className="nav-card-title">{t('openSourceProjects')}</h3>
-            <p className="nav-card-desc">{t('openSourceProjectsDesc')}</p>
-            <span className="nav-card-link">{t('readMore')} →</span>
-          </Link>
-          
-          <Link to="/resume" className="nav-card">
-            <h3 className="nav-card-title">{t('personalResume')}</h3>
-            <p className="nav-card-desc">{t('personalResumeDesc')}</p>
-            <span className="nav-card-link">{t('readMore')} →</span>
-          </Link>
-        </div>
+        {navigationGroups.map((group) => (
+          <div key={group.key} className="nav-group">
+            <h3 className="nav-group-title">{group.name[lang]}</h3>
+            <div className="nav-grid">
+              {group.links.map((link) => (
+                <a
+                  key={link.url}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="nav-card"
+                >
+                  <h3 className="nav-card-title">
+                    <span className="nav-card-icon">{link.icon}</span>
+                    {link.name}
+                  </h3>
+                  <p className="nav-card-desc">{link.desc[lang]}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))}
       </section>
     </div>
   );

@@ -1,60 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-// 模拟研究兴趣数据
-const researchInterests = [
-  'LLM Agent', '机器学习', '自然语言处理', '软件安全'
-];
-
-// 模拟统计数据
-const academicStats = {
-  papers: 0,
-  projects: 2,
-  conferences: 0,
-  fields: 1
-};
-
 const Academic: React.FC = () => {
   const { t } = useTranslation();
 
   return (
     <div className="container">
-      <div className="page-header">
-        <h1 className="page-title">{t('academicTitle')}</h1>
-        <p className="page-description">{t('academicDesc')}</p>
-      </div>
-
       <div className="academic-layout">
-        <section className="research-interests">
-          <h2 className="section-title">{t('researchInterests')}</h2>
-          <div className="interests-tags">
-            {researchInterests.map((interest) => (
-              <span key={interest} className="interest-tag">{interest}</span>
-            ))}
-          </div>
-        </section>
-
-        <section className="academic-stats">
-          <div className="stats-grid">
-            <div className="stat-card">
-              <div className="stat-number">{academicStats.papers}</div>
-              <div className="stat-label">{t('papers')}</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-number">{academicStats.projects}</div>
-              <div className="stat-label">{t('projects_count')}</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-number">{academicStats.conferences}</div>
-              <div className="stat-label">{t('conferences')}</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-number">{academicStats.fields}</div>
-              <div className="stat-label">{t('fields')}</div>
-            </div>
-          </div>
-        </section>
-
         <section className="academic-section">
           <h2 className="section-title">{t('publishedPapers')}</h2>
           <div className="coming-soon">

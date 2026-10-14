@@ -27,11 +27,6 @@ const Projects: React.FC = () => {
 
   return (
     <div className="container">
-      <div className="page-header">
-        <h1 className="page-title">{t('projectsTitle')}</h1>
-        <p className="page-description">{t('projectsDesc')}</p>
-      </div>
-
       <div className="projects-grid">
         {mockProjects.map((project) => (
           <div key={project.id} className="project-card">
@@ -70,26 +65,6 @@ const Projects: React.FC = () => {
             </div>
           </div>
         ))}
-      </div>
-
-      <div className="projects-stats">
-        <div className="stat-item">
-          <span className="stat-icon">💻</span>
-          <span className="stat-label">开源项目：</span>
-          <span className="stat-value">{mockProjects.length}个</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-icon">🏷️</span>
-          <span className="stat-label">技术栈：</span>
-          <span className="stat-value">
-            {Array.from(new Set(mockProjects.flatMap(p => p.tags))).length}种
-          </span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-icon">📅</span>
-          <span className="stat-label">最新更新：</span>
-          <span className="stat-value">2025年9月28日</span>
-        </div>
       </div>
     </div>
   );
