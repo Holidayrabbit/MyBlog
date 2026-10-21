@@ -11,6 +11,7 @@ import type { AdminArticle, GitHubUser } from '../../utils/githubApi';
 import AdminLogin from './AdminLogin';
 import AdminDashboard from './AdminDashboard';
 import ArticleEditor from './ArticleEditor';
+import { usePageMeta } from '../../hooks/usePageMeta';
 import './admin.css';
 
 interface AdminSession {
@@ -28,6 +29,8 @@ const Admin: React.FC = () => {
   const [authError, setAuthError] = useState<string | null>(null);
   // null = 列表页；'new' = 新建；AdminArticle = 编辑已有文章
   const [editing, setEditing] = useState<AdminArticle | 'new' | null>(null);
+
+  usePageMeta('文章管理');
 
   useEffect(() => {
     // OAuth 授权失败时 Worker 会带回错误信息（StrictMode 下初始化器会执行两次，

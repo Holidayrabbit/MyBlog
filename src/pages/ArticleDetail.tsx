@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Calendar, Tag } from 'lucide-react';
 import { useArticle } from '../hooks/useArticles';
 import { fetchArticleContent } from '../utils/articles';
+import { usePageMeta } from '../hooks/usePageMeta';
 import Markdown from '../components/Markdown';
 
 const ArticleDetail: React.FC = () => {
@@ -13,6 +14,8 @@ const ArticleDetail: React.FC = () => {
   const [content, setContent] = useState<string>('');
   const [contentLoading, setContentLoading] = useState(true);
   const [contentError, setContentError] = useState<string | null>(null);
+
+  usePageMeta(article?.title, article?.excerpt);
 
   useEffect(() => {
     async function loadContent() {

@@ -17,6 +17,9 @@ const resources = {
       language: 'Language',
       theme: 'Theme',
       admin: 'Article Admin',
+      loading: 'Loading articles...',
+      clearSearch: 'Clear search',
+      rssSubscribe: 'RSS Feed',
       
       // Home page
       welcome: 'Welcome to My Personal Website',
@@ -30,6 +33,9 @@ const resources = {
       totalArticles: 'Total Articles',
       totalTags: 'Tags',
       lastUpdated: 'Last Updated',
+      searchPlaceholder: 'Search articles...',
+      loadingSearchIndex: 'Loading search index...',
+      noSearchResults: 'No matching articles',
       
       // Academic page
       publishedPapers: 'Published Papers',
@@ -64,6 +70,9 @@ const resources = {
       language: '语言',
       theme: '主题',
       admin: '文章管理',
+      loading: '正在加载文章...',
+      clearSearch: '清除搜索',
+      rssSubscribe: 'RSS 订阅',
       
       // Home page
       welcome: '欢迎来到我的个人网站',
@@ -77,6 +86,9 @@ const resources = {
       totalArticles: '总计文章',
       totalTags: '标签数量',
       lastUpdated: '最新更新',
+      searchPlaceholder: '搜索文章...',
+      loadingSearchIndex: '正在加载搜索索引...',
+      noSearchResults: '没有找到相关文章',
       
       // Academic page
       publishedPapers: '发表论文',

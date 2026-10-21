@@ -90,6 +90,19 @@
   font-size: 14px;
 }
 
+.footer-text .rss-link {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  color: var(--text-secondary);
+  vertical-align: middle;
+  transition: color 0.3s ease;
+}
+
+.footer-text .rss-link:hover {
+  color: var(--accent-orange);
+}
+
 /* Common Components */
 .section-title {
   font-size: 32px;

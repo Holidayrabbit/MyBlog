@@ -1,4 +1,5 @@
 import React from 'react';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { useTranslation } from 'react-i18next';
 import { profile, type Language, type Text, type ResumeEntry } from '../data/profile';
 
@@ -56,6 +57,8 @@ const Resume: React.FC = () => {
   const { t, i18n } = useTranslation();
   const lang: Language = i18n.language.startsWith('zh') ? 'zh' : 'en';
   const T: Translate = (text) => (typeof text === 'string' ? text : text[lang]);
+
+  usePageMeta(t('resume'));
 
   return (
     <div className="container">

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ZhaoQie&apos;s Blog</title>
+    <link>https://holidayrabbit.github.io/MyBlog/</link>
+    <description>分享 AI Agent、大模型与编程技术的实践与思考</description>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 21 Oct 2026 03:23:43 GMT</lastBuildDate>
+    <atom:link href="https://holidayrabbit.github.io/MyBlog/rss.xml" rel="self" type="application/rss+xml"/>
+  <item>
+    <title>AI Agent Infrastructure 实战: Browser Use 如何从 AWS Lambda 演进到 Unikraft</title>
+    <link>https://holidayrabbit.github.io/MyBlog/#/articles/ai-agent-infrastructure-practice</link>
+    <guid isPermaLink="true">https://holidayrabbit.github.io/MyBlog/#/articles/ai-agent-infrastructure-practice</guid>
+    <pubDate>Tue, 03 Mar 2026 00:00:00 GMT</pubDate>
+    <description>当 AI Agent 需要执行代码时,如何确保安全、高效地运行?本文通过 Browser Use 的真实案例,深入讲解从 AWS Lambda 到 Unikraft micro-VMs 的架构演进,揭示沙箱隔离、控制平面设计和安全最佳实践。</description>
+    <category>Agent</category>
+    <category>Infrastructure</category>
+    <category>Security</category>
+    <category>Architecture</category>
+  </item>
+  <item>
+    <title>上下文工程：Agent系统设计的核心方法论</title>
+    <link>https://holidayrabbit.github.io/MyBlog/#/articles/agent-context-engineering</link>
+    <guid isPermaLink="true">https://holidayrabbit.github.io/MyBlog/#/articles/agent-context-engineering</guid>
+    <pubDate>Wed, 25 Feb 2026 00:00:00 GMT</pubDate>
+    <description>上下文工程 ≠ 提示工程。本文系统性地讲解Agent系统设计中的核心方法论，从上下文组成、退化模式、压缩优化，到多智能体架构、记忆系统、工具设计和项目开发流程。</description>
+    <category>Agent</category>
+    <category>Context Engineering</category>
+    <category>Architecture</category>
+  </item>
+  <item>
+    <title>Coding Agent 设计哲学：从代码补丁工到资深工程师的进化</title>
+    <link>https://holidayrabbit.github.io/MyBlog/#/articles/coding-agent-design-philosophy</link>
+    <guid isPermaLink="true">https://holidayrabbit.github.io/MyBlog/#/articles/coding-agent-design-philosophy</guid>
+    <pubDate>Mon, 23 Feb 2026 00:00:00 GMT</pubDate>
+    <description>在 AI 辅助编程时代，一个真正强大的 Coding Agent 不应满足于做按指令办事的“代码补丁工”，而应该具备资深工程师的心智模型。本文基于业界领先实践总结了一套核心的 Agent 设计哲学。</description>
+    <category>Agent</category>
+  </item>
+  <item>
+    <title>LLMDroid：用大语言模型高效增强移动应用GUI测试覆盖率</title>
+    <link>https://holidayrabbit.github.io/MyBlog/#/articles/llmdroid-paper-review</link>
+    <guid isPermaLink="true">https://holidayrabbit.github.io/MyBlog/#/articles/llmdroid-paper-review</guid>
+    <pubDate>Sat, 21 Feb 2026 00:00:00 GMT</pubDate>
+    <description>深度解析LLMDroid框架如何通过自主探索与LLM引导的双阶段策略，在降低成本的同时显著提升Android应用测试覆盖率</description>
+    <category>paper</category>
+    <category>Software</category>
+    <category>LLM</category>
+  </item>
+  <item>
+    <title>Full Self Coding：让100个AI Agent并行为你写代码</title>
+    <link>https://holidayrabbit.github.io/MyBlog/#/articles/full-self-coding-intro</link>
+    <guid isPermaLink="true">https://holidayrabbit.github.io/MyBlog/#/articles/full-self-coding-intro</guid>
+    <pubDate>Thu, 12 Feb 2026 00:00:00 GMT</pubDate>
+    <description>无需提示词、无需指令、无需计划，让100~1000个AI代理并行工作，自动解决代码库中的所有问题</description>
+    <category>开源</category>
+    <category>Docker</category>
+    <category>Agent</category>
+  </item>
+  <item>
+    <title>π：极简主义者的Agent框架</title>
+    <link>https://holidayrabbit.github.io/MyBlog/#/articles/pi-agent-framework</link>
+    <guid isPermaLink="true">https://holidayrabbit.github.io/MyBlog/#/articles/pi-agent-framework</guid>
+    <pubDate>Wed, 11 Feb 2026 00:00:00 GMT</pubDate>
+    <description>在大模型Agent框架百花齐放的今天，π选择了一条不同的道路：极简、可扩展、专注核心能力。这篇文章深入解析π框架的设计哲学和核心实现。</description>
+    <category>Agent</category>
+    <category>TypeScript</category>
+  </item>
+  <item>
+    <title>OpenClaw：重新定义AI Agent的四个维度</title>
+    <link>https://holidayrabbit.github.io/MyBlog/#/articles/openclaw-deep-dive</link>
+    <guid isPermaLink="true">https://holidayrabbit.github.io/MyBlog/#/articles/openclaw-deep-dive</guid>
+    <pubDate>Sun, 08 Feb 2026 00:00:00 GMT</pubDate>
+    <description>OpenClaw在短短两个月内从9000星飙升到10万星，成为AI Agent领域最火的开源项目。它的成功不是偶然，而是在架构、记忆、设计和应用四个维度上都做对了选择。</description>
+    <category>Agent</category>
+    <category>Software engineering</category>
+  </item>
+  <item>
+    <title>OpenCode：开源的 AI 编程助手技术解析</title>
+    <link>https://holidayrabbit.github.io/MyBlog/#/articles/opencode-tech-analysis</link>
+    <guid isPermaLink="true">https://holidayrabbit.github.io/MyBlog/#/articles/opencode-tech-analysis</guid>
+    <pubDate>Mon, 19 Jan 2026 00:00:00 GMT</pubDate>
+    <description>深入分析开源 AI 编程助手 OpenCode 的架构设计、Agent 实现和前端工程化技术</description>
+    <category>Agent</category>
+    <category>TypeScript</category>
+    <category>SDK</category>
+  </item>
+  <item>
+    <title>Claude Agent SDK:给AI一台电脑</title>
+    <link>https://holidayrabbit.github.io/MyBlog/#/articles/claude-agent-sdk</link>
+    <guid isPermaLink="true">https://holidayrabbit.github.io/MyBlog/#/articles/claude-agent-sdk</guid>
+    <pubDate>Mon, 05 Jan 2026 00:00:00 GMT</pubDate>
+    <description>Anthropic 最新推出的 Claude Agent SDK,核心理念是让 AI 像人类一样操作电脑。这篇文章深入解析它的设计哲学和与其他 Agent 框架的本质区别。</description>
+    <category>Claude</category>
+    <category>Agent</category>
+    <category>SDK</category>
+  </item>
+  <item>
+    <title>Claude Code Skills 使用指南</title>
+    <link>https://holidayrabbit.github.io/MyBlog/#/articles/claude-code-skills-guide</link>
+    <guid isPermaLink="true">https://holidayrabbit.github.io/MyBlog/#/articles/claude-code-skills-guide</guid>
+    <pubDate>Wed, 24 Dec 2025 00:00:00 GMT</pubDate>
+    <description>全面介绍 Claude Code 中的 Skill 功能：如何使用、创建和分享技能扩展，让 AI 编程助手更懂你的需求。</description>
+    <category>Claude Code</category>
+    <category>开发工具</category>
+    <category>Skills</category>
+  </item>
+  <item>
+    <title>ReAct 智能体框架</title>
+    <link>https://holidayrabbit.github.io/MyBlog/#/articles/ReAct_tutorial</link>
+    <guid isPermaLink="true">https://holidayrabbit.github.io/MyBlog/#/articles/ReAct_tutorial</guid>
+    <pubDate>Mon, 17 Nov 2025 00:00:00 GMT</pubDate>
+    <description>这是一篇介绍ReAct智能体框架的文章。</description>
+    <category>ReAct</category>
+    <category>Agent</category>
+    <category>LLM</category>
+  </item>
+  <item>
+    <title>从排序算法到 LambdaRank：让机器学会“谁更重要”</title>
+    <link>https://holidayrabbit.github.io/MyBlog/#/articles/LTR_tutorial</link>
+    <guid isPermaLink="true">https://holidayrabbit.github.io/MyBlog/#/articles/LTR_tutorial</guid>
+    <pubDate>Wed, 12 Nov 2025 00:00:00 GMT</pubDate>
+    <description>对排序学习的简介</description>
+    <category>搜索算法</category>
+    <category>排序</category>
+    <category>机器学习</category>
+  </item>
+  <item>
+    <title>Context Engineering Discussion by Lance and Peak</title>
+    <link>https://holidayrabbit.github.io/MyBlog/#/articles/context_engineering</link>
+    <guid isPermaLink="true">https://holidayrabbit.github.io/MyBlog/#/articles/context_engineering</guid>
+    <pubDate>Thu, 16 Oct 2025 00:00:00 GMT</pubDate>
+    <description>Lance and Peak discuss Context Engineering</description>
+    <category>Agent</category>
+    <category>Context Engineering</category>
+    <category>Manus</category>
+  </item>
+  <item>
+    <title>再见conda - - uv快速使用教程</title>
+    <link>https://holidayrabbit.github.io/MyBlog/#/articles/uv-intro</link>
+    <guid isPermaLink="true">https://holidayrabbit.github.io/MyBlog/#/articles/uv-intro</guid>
+    <pubDate>Sun, 28 Sep 2025 00:00:00 GMT</pubDate>
+    <description>从一个机器学习项目入手，如何从零开始使用 uv</description>
+    <category>Python</category>
+    <category>uv</category>
+    <category>环境管理</category>
+  </item>
+  </channel>
+</rss>

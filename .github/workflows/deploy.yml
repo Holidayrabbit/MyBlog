@@ -27,10 +27,7 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Generate articles
-      run: npm run articles:generate
-
-    - name: Build
+    - name: Build（含文章索引 / RSS / sitemap / 搜索索引生成）
       run: npm run build
 
     - name: Setup Pages

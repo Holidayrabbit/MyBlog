@@ -6,8 +6,9 @@
 
 ## 功能
 
-- 文章：Markdown 渲染（GFM、代码高亮、KaTeX 公式）、标签、自动摘要
+- 文章：Markdown 渲染（GFM、代码高亮、KaTeX 公式）、标签、自动摘要、全文搜索
 - 页面：首页 / 文章 / 学术 / 项目 / 简历，中英双语，明暗主题
+- 订阅与 SEO：RSS 订阅（`/rss.xml`）、sitemap、Open Graph 标签、逐页标题
 - 管理后台：`/#/admin`，在浏览器里写文章、传图片、查看部署状态，GitHub 身份校验，仅博主本人可登录
 - 发布：保存即 commit，push 到 main 后 GitHub Actions 自动构建部署
 
@@ -38,14 +39,15 @@ npm run dev                 # http://localhost:5173/MyBlog/
 | 命令 | 说明 |
 |------|------|
 | `npm run dev` | 启动开发服务器 |
-| `npm run build` | 类型检查 + 构建到 `dist/` |
+| `npm run build` | 类型检查 + 生成站点数据（索引/RSS/sitemap/搜索）+ 构建到 `dist/` |
+| `npm run site:generate` | 只重新生成文章索引、RSS、sitemap、搜索索引 |
 | `npm run preview` | 本地预览构建产物 |
 | `npm run lint` / `npm run type-check` | ESLint / TypeScript 检查 |
 
 ## 部署
 
 push 到 main 分支即自动部署（[.github/workflows/deploy.yml](.github/workflows/deploy.yml)）：
-安装依赖 → 生成文章索引 → 构建 → 发布到 GitHub Pages。
+安装依赖 → 构建（自动生成文章索引、RSS、sitemap、搜索索引）→ 发布到 GitHub Pages。
 
 注意 `vite.config.ts` 的 `base: '/MyBlog/'` 需与仓库名一致。自定义域名或其他平台见 [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)。
 

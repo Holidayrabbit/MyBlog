@@ -76,18 +76,6 @@
     "dateSort": "2026-02-11"
   },
   {
-    "id": "clbenchmark-paper-analysis",
-    "title": "因果推理的缺失环节：CLBenchmark揭示大语言模型的认知盲区",
-    "date": "2026年2月10日",
-    "excerpt": "论文 CL-BENCH: A BENCHMARK FOR CONTEXT LEARNING 背景介绍",
-    "tags": [
-      "LLM",
-      "paper"
-    ],
-    "filename": "clbenchmark-paper-analysis.md",
-    "dateSort": "2026-02-09"
-  },
-  {
     "id": "openclaw-deep-dive",
     "title": "OpenClaw：重新定义AI Agent的四个维度",
     "date": "2026年2月8日",
@@ -152,18 +140,6 @@
     "dateSort": "2025-11-17"
   },
   {
-    "id": "js-ts-core-mindset",
-    "title": "JS / TS 核心思维速学：从混乱到可控",
-    "date": "2025年11月17日",
-    "excerpt": "这是一篇介绍javascript和typescript核心设计思路的文章。",
-    "tags": [
-      "JavaScript",
-      "TypeScript"
-    ],
-    "filename": "js-ts-core-mindset.md",
-    "dateSort": "2025-11-17"
-  },
-  {
     "id": "LTR_tutorial",
     "title": "从排序算法到 LambdaRank：让机器学会“谁更重要”",
     "date": "2025年11月12日",
@@ -190,17 +166,6 @@
     "dateSort": "2025-10-16"
   },
   {
-    "id": "test_img",
-    "title": "图片测试",
-    "date": "2025年9月30日",
-    "excerpt": "测试图片",
-    "tags": [
-      "test"
-    ],
-    "filename": "test_img.md",
-    "dateSort": "2025-09-30"
-  },
-  {
     "id": "uv-intro",
     "title": "再见conda - - uv快速使用教程",
     "date": "2025年9月28日",
@@ -212,29 +177,5 @@
     ],
     "filename": "uv-intro.md",
     "dateSort": "2025-09-28"
-  },
-  {
-    "id": "时间的囚徒",
-    "title": "时间的囚徒",
-    "date": "2025年9月28日",
-    "excerpt": "一个关于时间的故事",
-    "tags": [
-      "小说"
-    ],
-    "filename": "时间的囚徒.md",
-    "dateSort": "2025-09-28"
-  },
-  {
-    "id": "code-block-demo",
-    "title": "代码块增强功能演示",
-    "date": "2025年1月5日",
-    "excerpt": "展示MyBlog代码块的所有增强功能，包括语法高亮、复制功能、行号显示和行高亮等特性。",
-    "tags": [
-      "演示",
-      "代码块",
-      "语法高亮"
-    ],
-    "filename": "code-block-demo.md",
-    "dateSort": "2025-01-05"
   }
 ]

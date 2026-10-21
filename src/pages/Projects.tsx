@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ExternalLink, Github } from 'lucide-react';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 // 模拟项目数据
 const mockProjects = [
@@ -24,6 +25,8 @@ const mockProjects = [
 
 const Projects: React.FC = () => {
   const { t } = useTranslation();
+
+  usePageMeta(t('projects'));
 
   return (
     <div className="container">

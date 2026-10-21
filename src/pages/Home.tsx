@@ -2,12 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLatestArticles } from '../hooks/useArticles';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { navigationGroups, type Language } from '../data/navigation';
 
 const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
   const lang: Language = i18n.language.startsWith('zh') ? 'zh' : 'en';
   const { articles, loading, error } = useLatestArticles(2);
+
+  usePageMeta(undefined, t('subtitle'));
 
   return (
     <div className="container">

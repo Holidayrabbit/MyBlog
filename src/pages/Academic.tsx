@@ -1,8 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 const Academic: React.FC = () => {
   const { t } = useTranslation();
+
+  usePageMeta(t('academic'));
 
   return (
     <div className="container">
