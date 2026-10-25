@@ -14,7 +14,7 @@ export const GISCUS_CONFIG = {
   repoId: 'R_kgDOP4P6Gg', // 形如 R_kgDOLxxxxx
   category: 'Announcements', // 建议选 Announcements（只有维护者能开新讨论）
   categoryId: 'DIC_kwDOP4P6Gs4DJjxU', // 形如 DIC_kwDOLxxxxx
-  mapping: 'pathname',
+  mapping: 'specific',
   strict: true,
   reactionsEnabled: true,
   inputPosition: 'top' as const,

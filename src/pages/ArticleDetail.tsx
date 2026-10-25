@@ -101,7 +101,7 @@ const ArticleDetail: React.FC = () => {
         </div>
       </article>
 
-      <Comments key={article.filename} />
+      <Comments key={article.filename} term={article.filename} />
     </div>
   );
 };

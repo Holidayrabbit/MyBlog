@@ -14,7 +14,7 @@ GitHub 仓库 → **Settings → General → Features** → 勾选 **Discussions
 
 ## 3. 填入 ID
 
-打开 <https://giscus.app/zh-CN>，在「仓库」填 `Holidayrabbit/MyBlog`，映射方式选 **pathname**，讨论分类建议选 **Announcements**（只有维护者能新建讨论，访客只能评论跟帖，不会被灌水）。
+打开 <https://giscus.app/zh-CN>，在「仓库」填 `Holidayrabbit/MyBlog`，映射方式选 **specific terms**（页面用文章文件名作为 term，因为站点是 hash 路由，pathname 全站相同），讨论分类建议选 **Announcements**（只有维护者能新建讨论，访客只能评论跟帖，不会被灌水）。
 
 把页面生成的两个 ID 填到 `src/config/comments.ts`：
 

@@ -9,11 +9,17 @@ const GISCUS_LANG: Record<string, string> = {
   en: 'en',
 };
 
+interface CommentsProps {
+  /** 稳定的文章标识（文件名），每篇文章对应一条独立讨论串。 */
+  term: string;
+}
+
 /**
  * giscus 评论区。父组件用 key={文章 id} 挂载，切换文章时自动重建。
+ * 站点是 hash 路由，pathname 全站相同，因此用 specific 映射 + term 区分文章。
  * 未完成 giscus 配置时静默隐藏。
  */
-const Comments: React.FC = () => {
+const Comments: React.FC<CommentsProps> = ({ term }) => {
   const { t, i18n } = useTranslation();
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -31,6 +37,7 @@ const Comments: React.FC = () => {
     script.setAttribute('data-category', GISCUS_CONFIG.category);
     script.setAttribute('data-category-id', GISCUS_CONFIG.categoryId);
     script.setAttribute('data-mapping', GISCUS_CONFIG.mapping);
+    script.setAttribute('data-term', term);
     script.setAttribute('data-strict', GISCUS_CONFIG.strict ? '1' : '0');
     script.setAttribute('data-reactions-enabled', GISCUS_CONFIG.reactionsEnabled ? '1' : '0');
     script.setAttribute('data-emit-metadata', '0');
@@ -76,7 +83,7 @@ const Comments: React.FC = () => {
     );
   }, [theme, i18n.language]);
 
-  if (!isGiscusConfigured()) return null;
+  if (!isGiscusConfigured() || !term) return null;
 
   return (
     <section className="comments-section">
