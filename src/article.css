@@ -370,3 +370,22 @@
     font-size: 24px;
   }
 }
+
+/* Comments (giscus) */
+.comments-section {
+  margin-top: 48px;
+}
+
+.comments-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.comments-container {
+  border-top: 1px solid var(--border-color, rgba(127, 127, 127, 0.2));
+  padding-top: 16px;
+}

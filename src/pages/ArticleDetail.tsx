@@ -6,6 +6,7 @@ import { useArticle } from '../hooks/useArticles';
 import { fetchArticleContent } from '../utils/articles';
 import { usePageMeta } from '../hooks/usePageMeta';
 import Markdown from '../components/Markdown';
+import Comments from '../components/Comments';
 
 const ArticleDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -99,6 +100,8 @@ const ArticleDetail: React.FC = () => {
           )}
         </div>
       </article>
+
+      <Comments key={article.filename} />
     </div>
   );
 };

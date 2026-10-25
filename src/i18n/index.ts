@@ -20,6 +20,7 @@ const resources = {
       loading: 'Loading articles...',
       clearSearch: 'Clear search',
       rssSubscribe: 'RSS Feed',
+      comments: 'Comments',
       
       // Home page
       welcome: 'Welcome to My Personal Website',
@@ -73,6 +74,7 @@ const resources = {
       loading: '正在加载文章...',
       clearSearch: '清除搜索',
       rssSubscribe: 'RSS 订阅',
+      comments: '评论',
       
       // Home page
       welcome: '欢迎来到我的个人网站',
