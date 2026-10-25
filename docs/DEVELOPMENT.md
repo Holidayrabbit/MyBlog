@@ -34,7 +34,7 @@ public/articles/*.md ──(scripts/generate-articles.js)──> public/articles
 
 - **站点前台**（读者看到的页面）只读：`src/utils/articles.ts` 拉取 `articles.json` 与文章原文，
   `src/hooks/useArticles.ts` 封装成 hooks，页面组件不直接发请求
-- **管理后台**（`/#/admin`，仅博主）读写 GitHub 仓库：
+- **管理后台**（`/admin`，仅博主）读写 GitHub 仓库：
   - `src/utils/githubApi.ts` — GitHub Contents API 封装（文章增删改、图片上传、登录与身份校验）
   - `src/pages/admin/` — Admin（容器）→ AdminLogin / AdminDashboard / ArticleEditor
   - 保存、删改、传图都直接 commit 到 main，由现有 CI 部署，后端为零

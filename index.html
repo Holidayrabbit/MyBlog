@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/linuxlogo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // 兼容旧版 hash 路由链接（RSS 老订阅、历史分享）：/#/articles/x → /articles/x
+      (function () {
+        var hash = location.hash;
+        if (hash.indexOf('#/') === 0) {
+          var root = location.pathname.indexOf('/MyBlog') === 0 ? '/MyBlog' : '';
+          location.replace(root + hash.slice(1) + location.search);
+        }
+      })();
+    </script>
     <title>ZhaoQie's Blog</title>
     <meta name="description" content="ZhaoQie 的个人博客：分享 AI Agent、大模型与编程技术的实践与思考" />
     <link rel="canonical" href="https://holidayrabbit.github.io/MyBlog/" />

@@ -29,12 +29,12 @@ function generateSitemap() {
   const articles = JSON.parse(fs.readFileSync(articlesPath, 'utf-8'));
 
   // 站内固定页面（admin 后台不对外，不收录）
-  const pages = ['', '#/articles', '#/academic', '#/projects', '#/resume'].map(
-    (fragment) => `  <url>\n    <loc>${SITE_URL}/${fragment}</loc>\n  </url>`
+  const pages = ['articles/', 'academic/', 'projects/', 'resume/'].map(
+    (page) => `  <url>\n    <loc>${SITE_URL}/${page}</loc>\n  </url>`
   );
 
   const articleUrls = articles.map(
-    (article) => `  <url>\n    <loc>${escapeXml(`${SITE_URL}/#/articles/${article.id}`)}</loc>\n    <lastmod>${article.dateSort}</lastmod>\n  </url>`
+    (article) => `  <url>\n    <loc>${escapeXml(`${SITE_URL}/articles/${article.id}/`)}</loc>\n    <lastmod>${article.dateSort}</lastmod>\n  </url>`
   );
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

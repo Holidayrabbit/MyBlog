@@ -12,7 +12,7 @@
 
 - `vite.config.ts` 中 `base: '/MyBlog/'` 必须与仓库名一致，否则资源 404
 - 线上地址格式：`https://<用户名>.github.io/<仓库名>/`
-- 路由使用 HashRouter，文章链接形如 `/#/articles/<id>`
+- 路由使用 BrowserRouter，文章链接形如 `/articles/<id>`；构建时用 Chrome 预渲染出每页静态 HTML，未预渲染路由（如 `/admin`）由 `404.html` 兜底加载 SPA；旧 hash 链接自动跳转
 
 ## 自定义域名
 

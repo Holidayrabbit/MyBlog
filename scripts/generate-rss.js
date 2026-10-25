@@ -39,7 +39,7 @@ function generateRss() {
 
   const items = articles
     .map((article) => {
-      const link = `${SITE_URL}/#/articles/${article.id}`;
+      const link = `${SITE_URL}/articles/${article.id}/`;
       const categories = article.tags.map((tag) => `    <category>${escapeXml(tag)}</category>`).join('\n');
       return `  <item>
     <title>${escapeXml(article.title)}</title>

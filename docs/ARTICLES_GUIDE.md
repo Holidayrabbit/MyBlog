@@ -4,7 +4,7 @@
 
 ## 网页后台
 
-访问 `/#/admin`（线上为 https://holidayrabbit.github.io/MyBlog/#/admin ）。
+访问 `/admin`（线上为 https://holidayrabbit.github.io/MyBlog/admin ）。
 
 ### 登录
 

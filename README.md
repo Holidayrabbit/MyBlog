@@ -7,9 +7,10 @@
 ## 功能
 
 - 文章：Markdown 渲染（GFM、代码高亮、KaTeX 公式）、标签、自动摘要、全文搜索
+- 路由：BrowserRouter + 构建时预渲染（每篇文章独立静态 HTML，SEO 友好），旧 `/#/articles/x` 链接自动跳转新地址
 - 页面：首页 / 文章 / 学术 / 项目 / 简历，中英双语，明暗主题
 - 订阅与 SEO：RSS 订阅（`/rss.xml`）、sitemap、Open Graph 标签、逐页标题
-- 管理后台：`/#/admin`，在浏览器里写文章、传图片、查看部署状态，GitHub 身份校验，仅博主本人可登录
+- 管理后台：`/admin`，在浏览器里写文章、传图片、查看部署状态，GitHub 身份校验，仅博主本人可登录
 - 发布：保存即 commit，push 到 main 后 GitHub Actions 自动构建部署
 
 ## 快速开始
@@ -24,7 +25,7 @@ npm run dev                 # http://localhost:5173/MyBlog/
 
 ## 写文章
 
-统一通过网页后台管理：访问 `/#/admin` 登录后即可新建、编辑、删除文章，上传图片并插入引用，左侧编辑、右侧实时预览。
+统一通过网页后台管理：访问 `/admin` 登录后即可新建、编辑、删除文章，上传图片并插入引用，左侧编辑、右侧实时预览。
 登录支持两种方式，均会校验账号必须是仓库所有者：
 
 - **GitHub 一键登录**（需先部署 OAuth 中转，见 [cloudflare-worker/README.md](cloudflare-worker/README.md)）

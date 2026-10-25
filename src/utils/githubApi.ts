@@ -67,7 +67,7 @@ export function captureOAuthResult(): void {
   const error = params.get('oauth_error');
   if (!token && !error) return;
 
-  history.replaceState(null, '', `${window.location.pathname}#/admin`);
+  history.replaceState(null, '', `${import.meta.env.BASE_URL}admin`);
 
   if (error) {
     sessionStorage.setItem(OAUTH_ERROR_KEY, error);
